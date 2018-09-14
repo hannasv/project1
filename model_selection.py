@@ -34,13 +34,13 @@ class GridSearch:
         return np.square(np.subtract(y_true, y_pred)).mean()
 
         # Creating a R2-square fuction:
-    def R2(y, y_predict):
+    def r2(y, y_predict):
         C = y-y_predict
         val = sum(sum((y-y_predict))**2)/sum(sum((y-np.mean(y))**2))
         return 1 - val
 
     # Creating a mean square error function:
-    def MSE(y, y_predict):
+    def msn(y, y_predict):
         C = y-y_predict
         [n, m] = C.shape
         return sum(sum((C)**2))/(n*m)
