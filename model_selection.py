@@ -28,10 +28,23 @@ class GridSearch:
         self.train_scores = None
         self.test_scores = None
 
+# funker denne for baae vektor og matrise???
     def mean_squared_error(self, y_true, y_pred):
         """Computes the Mean Squared Error score metric.""""
-
         return np.square(np.subtract(y_true, y_pred)).mean()
+
+        # Creating a R2-square fuction:
+    def R2(y, y_predict):
+        C = y-y_predict
+        val = sum(sum((y-y_predict))**2)/sum(sum((y-np.mean(y))**2))
+        return 1 - val
+
+    # Creating a mean square error function:
+    def MSE(y, y_predict):
+        C = y-y_predict
+        [n, m] = C.shape
+        return sum(sum((C)**2))/(n*m)
+
 
     def fit(self, X_train, X_test, y_train, y_test):
         """Searches for the optimal hyperparameter combination."""
