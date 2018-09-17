@@ -9,11 +9,12 @@
 The hyperparameter grid search framework.
 """
 
-__author__ = 'author 1', 'author 2'
+__author__ = 'Hanna Svennevik', 'Paulina Tedesco'
 __email__ = 'email1', 'email2'
 
 
 class GridSearch:
+    """Determines optimal hyperparameter for given algorithm."""
 
     def __init__(self, model, param_grid, verbose=True, random_state=None):
 
@@ -28,22 +29,35 @@ class GridSearch:
         self.train_scores = None
         self.test_scores = None
 
+    @property
+    def best_score:
+
+        return self._best_score
+
+    @best_score.setter
+    def best_score(self, value):
+
+        if value is None:
+            return
+        else:
+            return float(value)
+
 # funker denne for baae vektor og matrise???
     def mean_squared_error(self, y_true, y_pred):
         """Computes the Mean Squared Error score metric.""""
-        return np.square(np.subtract(y_true, y_pred)).mean()
 
-        # Creating a R2-square fuction:
+        mse = np.square(np.subtract(y_true, y_pred)).mean()
+        # In case of matrix.
+        if mse.dim == 2:
+            return np.sum(mse)
+        else:
+            return mse
+
+        # Creating a R2-square fuction: Skriv denne som above
     def r2(y, y_predict):
         C = y-y_predict
         val = sum(sum((y-y_predict))**2)/sum(sum((y-np.mean(y))**2))
         return 1 - val
-
-    # Creating a mean square error function:
-    def msn(y, y_predict):
-        C = y-y_predict
-        [n, m] = C.shape
-        return sum(sum((C)**2))/(n*m)
 
 
     def fit(self, X_train, X_test, y_train, y_test):
@@ -68,7 +82,7 @@ class GridSearch:
             # Aggregate predictions to determine how `good` the model is.
             y_pred = estimator.predict(X_test)
             # Compute score.
-            score = self.mean_squared_error(y_test, y_pred)
+            score = self.mean_squared_error(y_test, y_pred) # Lag en dictionary med r2 score ogsaa
 
             # Save best alpha and best score:
             if score > self.best_score:
@@ -82,8 +96,8 @@ class GridSearch:
 
             # Store both train and test scores to evaluate overfitting.
             # If train scores >> test scores ==> overfitting.
-            self.test_scores.append(estimator.predict(X_train))
-            self.train_scores.append(score)
+            self.train_scores.append(estimator.predict(X_train))
+            self.test_scores.append(score)
 
             return self
 
@@ -93,8 +107,8 @@ if __name__ == '__main__':
     import algorithms
     import numpy as np
 
-    models = {'ridge': algorithms.Ridge,}
-    param_grid = {'ridge': [0.01, 0.1, 1.0, 10.0]}
+    models = {'ridge': algorithms.Ridge, "ols": algorithms.OLS, "lasso": Algorithmns.Lasso}
+    param_grid = {'ridge': [0.01, 0.1, 1.0, 10.0], "ols": 0, 'lasso': [0.01, 0.1, 1.0, 10.0]}
 
     random_states = np.arange(40)
     for random_state in random_states:

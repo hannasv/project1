@@ -39,9 +39,11 @@ def model_comparison(models, param_grid, X, y, random_states):
         train_scores[name], test_scores[name] = [], []
         for random_state in random_states:
 
+# random states ?? bytt seed
+
             # Generate data (bootstrap sampling in your case).
-            X_train, X_test = train_test_split(X, random_state=random_state)
-            y_train, y_test = train_test_split(y, random_state=random_state)
+            X_train, X_test = bootstrap(X, random_state=random_state)
+            y_train, y_test = bootstrap(y, random_state=random_state)
 
             # Pass algorithm + corresponding params to grid searcher and
             # determine optimal alpha param.
@@ -55,13 +57,23 @@ def model_comparison(models, param_grid, X, y, random_states):
     return train_scores, test_scores
 
 
+# Google gridsearch sklearn
+    # finne lmd verdien som er best for hvert dataset.
+
+def bootstrap(X, random_state):
+        bootVec = np.random.choise(X, len(X))
+    return bootVec, X
+
+
 if __name__ == '__main__':
     # Demo run
 
     # A collection of algorithm name : algorithm.
     models = {
+        "ols": algorithms.OLS,
         'ridge': algorithms.Ridge,
-        'lasso': algorithms.Lasso
+        #'lasso': sklearn.Lasso
+        "lasso": algorithms.Lasso
     }
     param_grid = {
         # Ridge alpha params.
