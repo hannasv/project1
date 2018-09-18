@@ -76,6 +76,7 @@ if __name__ == '__main__':
         "lasso": algorithms.Lasso
     }
     param_grid = {
+        "ols": [0]
         # Ridge alpha params.
         'ridge': [0.01, 0.1, 1.0, 10.0],
         # Lasso alpha params.
