@@ -32,8 +32,6 @@ def model_comparison(models, param_grid, X, y, random_states):
         (dict): Model scores.
 
     """
-    print("Hello")
-
 
     train_scores, test_scores = {}, {}
     for name, estimator in models.items():
