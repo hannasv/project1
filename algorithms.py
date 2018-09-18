@@ -61,7 +61,7 @@ class Lasso:
 
         self.lmd = lmd
         self.random_state = random_state
-        self.model =
+        self.model = None
 
     def fit(self, X, y):
         """Train the model."""

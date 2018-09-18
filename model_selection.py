@@ -30,7 +30,7 @@ class GridSearch:
         self.test_scores = None
 
     @property
-    def best_score:
+    def best_score():
 
         return self._best_score
 
@@ -44,7 +44,7 @@ class GridSearch:
 
 # funker denne for baae vektor og matrise???
     def mean_squared_error(self, y_true, y_pred):
-        """Computes the Mean Squared Error score metric.""""
+        """Computes the Mean Squared Error score metric."""
 
         mse = np.square(np.subtract(y_true, y_pred)).mean()
         # In case of matrix.
@@ -101,7 +101,7 @@ class GridSearch:
 
             return self
 
-
+"""
 if __name__ == '__main__':
     # Demo run
     import algorithms
@@ -129,3 +129,4 @@ if __name__ == '__main__':
 
         # Print the score of of the corresponing alpha value.
         print(grid.best_score)
+"""

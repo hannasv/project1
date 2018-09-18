@@ -17,6 +17,13 @@ import algorithms
 import numpy as np
 from model_selection import GridSearch
 
+# Google gridsearch sklearn
+    # finne lmd verdien som er best for hvert dataset.
+
+def bootstrap(X, random_state):
+        bootVec = np.random.choice(X, len(X))
+        return bootVec,X
+
 
 def model_comparison(models, param_grid, X, y, random_states):
     """Perform the model comparison experiment.
@@ -48,7 +55,8 @@ def model_comparison(models, param_grid, X, y, random_states):
             # Pass algorithm + corresponding params to grid searcher and
             # determine optimal alpha param.
             grid = GridSearch(estimator, param_grid[name], random_state)
-            grid.fit(X, y)
+            #grid.fit(X, y)
+            grid.fit(X_train, X_test, y_train, y_test)
 
             # Store svg score values for each model.
             train_scores[name].append(np.mean(grid.train_scores))
@@ -57,14 +65,8 @@ def model_comparison(models, param_grid, X, y, random_states):
     return train_scores, test_scores
 
 
-# Google gridsearch sklearn
-    # finne lmd verdien som er best for hvert dataset.
 
-def bootstrap(X, random_state):
-        bootVec = np.random.choise(X, len(X))
-    return bootVec, X
-
-
+"""
 if __name__ == '__main__':
     # Demo run
 
@@ -90,3 +92,4 @@ if __name__ == '__main__':
     # NOTE:
     # This procedure you can extent to return std of score and create a validation curve:
     # such as in https://chrisalbon.com/machine_learning/model_evaluation/plot_the_validation_curve/
+"""
