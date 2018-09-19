@@ -28,10 +28,9 @@ class GridSearch:
         self.best_param = None
         self.train_scores = None
         self.test_scores = None
-
-    @property
-    def best_score():
-
+"""
+    @property --> func to variable
+    def best_score(self):
         return self._best_score
 
     @best_score.setter
@@ -41,6 +40,7 @@ class GridSearch:
             return
         else:
             return float(value)
+"""
 
 # funker denne for baae vektor og matrise???
     def mean_squared_error(self, y_true, y_pred):
