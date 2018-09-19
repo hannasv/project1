@@ -28,7 +28,7 @@ class GridSearch:
         self.best_param = None
         self.train_scores = None
         self.test_scores = None
-"""
+    """
     @property --> func to variable
     def best_score(self):
         return self._best_score
@@ -40,12 +40,11 @@ class GridSearch:
             return
         else:
             return float(value)
-"""
+    """
 
-# funker denne for baae vektor og matrise???
-    def mean_squared_error(self, y_true, y_pred):
+    # funker denne for baae vektor og matrise???
+    def mean_squared_error(y_true, y_pred):
         """Computes the Mean Squared Error score metric."""
-
         mse = np.square(np.subtract(y_true, y_pred)).mean()
         # In case of matrix.
         if mse.dim == 2:
