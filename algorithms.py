@@ -15,12 +15,13 @@ __email__ = 'email1', 'email2'
 class OLS:
     """The ordinary least squares algorithm"""
 
-    def __init__(self, random_state = None):
+    def __init__(self, lmd = 0,random_state=None):
 
         self.random_state = random_state
-        # lagre beta her?
-        self.beta = beta
+        self.lmd = lmd
 
+        # NOTE: Varialbe set with fit method.
+        self.beta = None
 
     def fit(self, X, y):
         """Train the model"""
@@ -31,8 +32,6 @@ class OLS:
         return X @ beta
 
 
-
-
 class Ridge:
     """The Ridge algorithm."""
 
@@ -40,12 +39,13 @@ class Ridge:
 
         self.lmd = lmd
         self.random_state = random_state
+
+        # NOTE: Varible set wtih fit method.
         self.beta = beta
 
     def fit(self, X, y):
         """Train the model."""
         self.beta = np.linalg.inv(X.T @ X - lmd*np.eyes(len(y)))@ X.T @ y
-
 
     def predict(self, X):
         """Aggregate model predictions."""
@@ -61,7 +61,7 @@ class Lasso:
 
         self.lmd = lmd
         self.random_state = random_state
-        self.model = model
+        self.model = None
 
     def fit(self, X, y):
         """Train the model."""
