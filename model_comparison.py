@@ -43,7 +43,58 @@ def frankeFunction(x,y):
     return term1 + term2 + term3 + term4
 
 
-def model_comparison(models, param_grid, p, x, y, random_states):
+def bootstrap(X, z, random_state):
+
+    # For random randint
+    np.random.seed(random_state)
+
+    nrows, ncols = np.shape(X)
+
+    selected_rows = np.random.randint(
+        low=0, high=nrows, size=(nrows, ncols)
+    )
+    selected_cols = np.random.randint(
+        low=0, high=ncols, size=(nrows, ncols)
+    )
+    X_subset = X[selected_rows, selected_cols]
+    z_subset = z[selected_rows]
+
+    return X_subset, z_subset
+
+
+def train_test_split(X, z, split_size=0.2, random_state=None):
+
+    # For random choice.
+    np.random.seed(random_state)
+
+    # Extract number of rows and columns in data matrix.
+    nrows, ncols = np.shape(X)
+
+    # Determine the proportion of training and test samples
+    # from the data matrix size-
+    ntest_samples = int(nrows * split_size)
+    ntrain_samples = int(nrows - ntest_samples)
+    # Randomly select indices for training and test samples
+    # without replacement.
+    row_samples = np.arange(nrows)
+    selected_train_samples = np.random.choice(
+        row_samples, ntrain_samples, replace=False
+    )
+    selected_test_samples = [
+        sample for sample in row_samples
+        if sample not in selected_train_samples
+    ]
+    # Extract trianing and test samples based on selected
+    # indices.
+    X_train = X[selected_train_samples, :]
+    X_test = X[selected_test_samples, :]
+    z_train = z[selected_train_samples]
+    z_test = z[selected_test_samples]
+
+    return X_train, X_test, z_train, z_test
+
+
+def model_comparison(models, param_grid, X, z, split_size=0.2):
     """Perform the model comparison experiment.
 
     Args:
@@ -57,33 +108,53 @@ def model_comparison(models, param_grid, p, x, y, random_states):
         (dict): Model scores.
     """
 
-    train_scores, test_scores = {}, {}
+    # NOTE: Increase for more general results.
+    random_states = np.arange(4)
+
+    results = {}
     for name, estimator in models.items():
 
-        train_scores[name], test_scores[name] = [], []
+        X_boot_std, X_boot_mean = [], []
+        z_boot_std, z_boot_mean = [], []
+
+        avg_train_scores, avg_test_scores = [], []
         for random_state in random_states:
 
             # Generate data (bootstrap sampling in your case).
-            print(x.shape)
-            x_train, x_test = bootstrap(x, random_state=random_state)
-            y_train, y_test = bootstrap(y, random_state=random_state)
 
-            X_train = generateDesignmatrix(p, x_train, y_train)
-            X_test = generateDesignmatrix(p, x_test, y_test)
+            #x_train, x_test = bootstrap(x, random_state=random_state)
+            #y_train, y_test = bootstrap(y, random_state=random_state)
 
-            z_train = frankeFunction(x_train, y_train)
-            z_test = frankeFunction(x_test, y_test)
+            #X_train = generateDesignmatrix(p, x_train, y_train)
+            #X_test = generateDesignmatrix(p, x_test, y_test)
 
+            #z_train = frankeFunction(x_train, y_train)
+            #z_test = frankeFunction(x_test, y_test)
+            #print(np.shape())
+            #print(np.shape())
             # Pass algorithm + corresponding params to grid searcher and
             # determine optimal alpha param.
+
+            X_subset, z_subset = bootstrap(X, z, random_state)
+            X_train, X_test, z_train, z_test = train_test_spli(
+                X_subset, z_subset, split_size=split_size
+            )
+            # TODO: May need to change axis
+            X_boot_mean.append(np.mean(X_subset, axis=1))
+            X_boot_std.append(np.std(X_subset, axis=1))
+
             grid = GridSearch(estimator, param_grid[name], random_state)
-
-
             grid.fit(X_train, X_test, z_train, z_test)
 
             # Store svg score values for each model.
-            train_scores[name].append(np.mean(grid.train_scores))
-            test_scores[name].append(np.mean(grid.test_scores))
+            avg_train_scores.append(np.mean(grid.train_scores))
+            avg_test_scores.append(np.mean(grid.test_scores))
+
+        results[name] = {
+            'avg_train_scores': avg_train_scores,
+            'avg_test_scores': avg_test_scores,
+            ''
+        }
 
     return train_scores, test_scores
 
