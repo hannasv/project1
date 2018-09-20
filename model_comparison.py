@@ -9,8 +9,8 @@
 The model comparison framework.
 """
 
-__author__ = 'author 1', 'author 2'
-__email__ = 'email1', 'email2'
+__author__ = 'Hanna Svennevik', 'Paulina Tedesco'
+__email__ = 'hanna.svennevik@fys.uio.no', 'paulinatedesco@gmail.com'
 
 
 import algorithms
@@ -20,22 +20,25 @@ from model_selection import GridSearch
 # Google gridsearch sklearn
     # finne lmd verdien som er best for hvert dataset.
 
-def bootstrap(x, random_state):
+
+def bootstrap(x):
         bootVec = np.random.choice(x, len(x))
-        return bootVec,x # returns x_train, x_test
+        return bootVec, x  # returns x_train, x_test
+
 
 def generateDesignmatrix(p, x, y):
-    m = int((p**2+3*p+2)/2) # returnerer heltall for p = [1:5]
+    m = int((p**2+3*p+2)/2)  # returnerer heltall for p = [1:5]
     X = np.zeros((len(x), m))
-    X[:,0] = 1
+    X[:, 0] = 1
     counter = 1
     for i in range(1, p+1):
         for j in range(i+1):
-            X[:,counter] = x**(i-j) * y**j
-            counter+=1
+            X[:, counter] = x**(i-j) * y**j
+            counter += 1
     return X
 
-def frankeFunction(x,y):
+
+def frankeFunction(x, y):
     term1 = 0.75*np.exp(-(0.25*(9*x-2)**2) - 0.25*((9*y-2)**2))
     term2 = 0.75*np.exp(-((9*x+1)**2)/49.0 - 0.1*(9*y+1))
     term3 = 0.5*np.exp(-(9*x-7)**2/4.0 - 0.25*((9*y-3)**2))

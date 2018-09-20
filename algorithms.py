@@ -9,18 +9,19 @@
 Representations of algorithms.
 """
 
-__author__ = 'author 1', 'author 2'
-__email__ = 'email1', 'email2'
+__author__ = 'Hanna Svennevik', 'Paulina Tedesco'
+__email__ = 'hanna.svennevik@fys.uio.no', 'paulinatedesco@gmail.com'
+
 
 class OLS:
     """The ordinary least squares algorithm"""
 
-    def __init__(self, lmd = 0,random_state=None):
+    def __init__(self, lmd=0, random_state=None):
 
         self.random_state = random_state
         self.lmd = lmd
 
-        # NOTE: Varialbe set with fit method.
+        # NOTE: Variable set with fit method.
         self.beta = None
 
     def fit(self, X, y):
