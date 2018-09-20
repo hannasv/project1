@@ -19,11 +19,10 @@ import numpy as np
 class GridSearch:
     """Determines optimal hyperparameter for given algorithm."""
 
-    def __init__(self, model, params, name, verbose=True, random_state=None):
+    def __init__(self, model, params, name, random_state=None):
 
         self.model = model
         self.params = params
-        self.verbose = True
         self.random_state = random_state
         self.name = name
 
@@ -59,6 +58,7 @@ class GridSearch:
     # TODO: Creating a R2-square fuction: Skriv denne som above
     @staticmethod # forteller klassen at den ikke trenger self.
     def r2(y, y_predict):
+
         C = y-y_predict
         val = sum(sum((y-y_predict))**2)/sum(sum((y-np.mean(y))**2))
         return 1 - val
@@ -71,12 +71,9 @@ class GridSearch:
         self.results = {self.name: []}
         self.train_scores, self.test_scores = [], []
 
+        self.best_score = 0.0
         # looper over all lamda values
         for num, param in enumerate(self.params):
-
-            # Prints an update on each round.
-            if self.verbose:
-                print('Grid search round: {}'.format(num + 1))
 
             # Create new model instance.
             estimator = self.model(lmd=param, random_state=self.random_state)
@@ -86,18 +83,13 @@ class GridSearch:
             # Aggregate predictions to determine how `good` the model is.
             y_pred = estimator.predict(X_test)
             # Compute score.
-            score = self.mean_squared_error(y_test,y_pred)
+            score = self.mean_squared_error(y_test, y_pred)
             # Lag en dictionary med r2 score ogsaa
 
             # Save best alpha and best score:
             if score > self.best_score:
                 self.best_score = score
-                self.best_param = alpha
-
-                # Prints nre bets score with param name and value.
-                if self.verbose:
-                    print('New best score: {} with param {} value: {}'
-                          ''.format(score, name, param))
+                self.best_param = param
 
             # Store both train and test scores to evaluate overfitting.
             # If train scores >> test scores ==> overfitting.

@@ -94,7 +94,7 @@ def train_test_split(X, z, split_size=0.2, random_state=None):
     return X_train, X_test, z_train, z_test
 
 
-def model_comparison(models, param_grid, X, z, split_size=0.2):
+def model_comparison(models, param_grid, X, z, split_size=0.2, verbose=True):
     """Perform the model comparison experiment.
 
     Args:
@@ -114,11 +114,14 @@ def model_comparison(models, param_grid, X, z, split_size=0.2):
     results = {}
     for name, estimator in models.items():
 
+        if verbose:
+            print('Testing model: {}'.format(name))
+
         X_boot_std, X_boot_mean = [], []
         z_boot_std, z_boot_mean = [], []
 
         avg_train_scores, avg_test_scores = [], []
-        for random_state in random_states:
+        for num, random_state in enumerate(random_states):
 
             # Generate data (bootstrap sampling in your case).
 
@@ -136,7 +139,7 @@ def model_comparison(models, param_grid, X, z, split_size=0.2):
             # determine optimal alpha param.
 
             X_subset, z_subset = bootstrap(X, z, random_state)
-            X_train, X_test, z_train, z_test = train_test_spli(
+            X_train, X_test, z_train, z_test = train_test_split(
                 X_subset, z_subset, split_size=split_size
             )
             # TODO: May need to change axis
@@ -150,13 +153,18 @@ def model_comparison(models, param_grid, X, z, split_size=0.2):
             avg_train_scores.append(np.mean(grid.train_scores))
             avg_test_scores.append(np.mean(grid.test_scores))
 
+        if verbose:
+            print('Best average train score: {}'.format(
+                np.max(avg_train_scores))
+            )
+            print('Best average test score: {}'.format(np.max(avg_test_scores)))
+
         results[name] = {
             'avg_train_scores': avg_train_scores,
-            'avg_test_scores': avg_test_scores,
-            ''
+            'avg_test_scores': avg_test_scores
         }
 
-    return train_scores, test_scores
+    return results
 
 
 
