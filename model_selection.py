@@ -10,7 +10,7 @@ The hyperparameter grid search framework.
 """
 
 __author__ = 'Hanna Svennevik', 'Paulina Tedesco'
-__email__ = 'email1', 'email2'
+__email__ = 'hanna.svennevik@fys.uio.no', 'paulinatedesco@gmail.com'
 
 
 import numpy as np
@@ -31,6 +31,7 @@ class GridSearch:
         self.best_param = None
         self.train_scores = None
         self.test_scores = None
+
     """
     @property --> func to variable
     def best_score(self):
@@ -63,7 +64,6 @@ class GridSearch:
         val = sum(sum((y-y_predict))**2)/sum(sum((y-np.mean(y))**2))
         return 1 - val
 
-
     def fit(self, X_train, X_test, y_train, y_test):
         """Searches for the optimal hyperparameter combination."""
         # model and params are now lists --> sende med navn istedenfor.
@@ -86,6 +86,7 @@ class GridSearch:
             score = self.mean_squared_error(y_test, y_pred)
             # Lag en dictionary med r2 score ogsaa
 
+
             # Save best alpha and best score:
             if score > self.best_score:
                 self.best_score = score
@@ -97,6 +98,7 @@ class GridSearch:
             self.test_scores.append(score)
 
             return self
+
 
 """
 if __name__ == '__main__':
