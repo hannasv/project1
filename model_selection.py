@@ -27,10 +27,17 @@ class GridSearch:
         self.name = name
 
         # NOTE: Attribuets modified with instance.
-        self.best_score = None
-        self.best_param = None
-        self.train_scores = None
-        self.test_scores = None
+        #self.best_score = None
+        #self.best_param = None
+        self.train_scores_mse = None
+        self.test_scores_mse = None
+        self.train_scores_r2 = None
+        self.test_scores_r2 = None
+        self.avg_bootvec = None
+        self.best_mse = None
+        self.best_r2 = None
+        self.best_param_mse = None
+        self.best_param_r2 = None
 
     """
     @property --> func to variable
@@ -58,10 +65,11 @@ class GridSearch:
 
     # TODO: Creating a R2-square fuction: Skriv denne som above
     @staticmethod # forteller klassen at den ikke trenger self.
-    def r2(y, y_predict):
+    def r2(y_true, y_pred):
 
-        C = y-y_predict
-        val = sum(sum((y-y_predict))**2)/sum(sum((y-np.mean(y))**2))
+        #C = y-y_predict
+        val = np.square(np.subtract(y_true, y_pred)).sum()/np.square(np.subtract(y_true, y_true.mean())).sum()
+        #val = sum(sum((y-y_predict))**2)/sum(sum((y-np.mean(y))**2))
         return 1 - val
 
     def fit(self, X_train, X_test, y_train, y_test):
@@ -69,10 +77,12 @@ class GridSearch:
         # model and params are now lists --> sende med navn istedenfor.
         # Setup
         self.results = {self.name: []}
-        self.train_scores, self.test_scores = [], []
+        self.train_scores_mse, self.test_scores_mse = [], []
+        self.train_scores_r2, self.test_scores_r2 = [], []
+        self.best_mse = self.best_r2 = 0.0
 
-        self.best_score = 0.0
         # looper over all lamda values
+        self.avg_bootvec = []
         for num, param in enumerate(self.params):
 
             # Create new model instance.
@@ -83,21 +93,42 @@ class GridSearch:
             # Aggregate predictions to determine how `good` the model is.
             y_pred = estimator.predict(X_test)
             # Compute score.
-            score = self.mean_squared_error(y_test, y_pred)
+            score_mse = self.mean_squared_error(y_test, y_pred)
+            score_r2 = self.r2(y_test, y_pred)
             # Lag en dictionary med r2 score ogsaa
 
 
+            #----
+            # TODO: skrive bias og covariance
+
+            self.avg_bootvec.append(np.mean(y_train))
+            print(self.avg_bootvec)
+
+            # ----
+
             # Save best alpha and best score:
-            if score > self.best_score:
-                self.best_score = score
-                self.best_param = param
+            if score_mse > self.best_mse:
+                self.best_mse = score_mse
+                self.best_param_mse = param
+
+            if score_r2 > self.best_r2:
+                self.best_r2 = score_r2
+                self.best_param_r2 = param
+
 
             # Store both train and test scores to evaluate overfitting.
+            # Vi trenger egentlig ikke train score
             # If train scores >> test scores ==> overfitting.
-            self.train_scores.append(estimator.predict(X_train))
-            self.test_scores.append(score)
+            self.train_scores_mse.append(estimator.predict(X_train))
+            self.test_scores_mse.append(score_mse)
 
+            self.train_scores_r2.append(estimator.predict(X_train))
+            self.test_scores_r2.append(score_r2)
+
+            #print("best fit lamda " + self.name + " %0.2f  ", self.best_param_mse)
+            #print("best fit lamda " + self.name + " %0.2f ", self.best_param_r2)
             return self
+
 
 
 """

@@ -123,7 +123,8 @@ def model_comparison(models, param_grid, X, z, split_size=0.2, verbose=True):
         X_boot_std, X_boot_mean = [], []
         z_boot_std, z_boot_mean = [], []
 
-        avg_train_scores, avg_test_scores = [], []
+        avg_train_scores_mse, avg_test_scores_mse = [], []
+        avg_train_scores_r2, avg_test_scores_r2 = [], []
         for num, random_state in enumerate(random_states):
 
             # Generate data (bootstrap sampling in your case).
@@ -153,18 +154,32 @@ def model_comparison(models, param_grid, X, z, split_size=0.2, verbose=True):
             grid.fit(X_train, X_test, z_train, z_test)
 
             # Store svg score values for each model.
-            avg_train_scores.append(np.mean(grid.train_scores))
-            avg_test_scores.append(np.mean(grid.test_scores))
+            avg_train_scores_mse.append(np.mean(grid.train_scores_mse))
+            avg_test_scores_mse.append(np.mean(grid.test_scores_mse))
+
+            avg_train_scores_r2.append(np.mean(grid.train_scores_r2))
+            avg_test_scores_r2.append(np.mean(grid.test_scores_r2))
 
         if verbose:
-            print('Best average train score: {}'.format(
-                np.max(avg_train_scores))
+            print('Best average train score (mse): {}'.format(
+                np.max(avg_train_scores_mse))
             )
-            print('Best average test score: {}'.format(np.max(avg_test_scores)))
+            print('Best average train score (r2): {}'.format(
+                np.max(avg_train_scores_r2))
+            )
+
+            print('Best average test score (mse): {}'.format(
+                np.max(avg_test_scores_mse))
+            )
+            print('Best average test score (r2): {}'.format(
+                np.max(avg_test_scores_r2))
+            )
 
         results[name] = {
-            'avg_train_scores': avg_train_scores,
-            'avg_test_scores': avg_test_scores
+            'avg_train_scores_mse': avg_train_scores_mse,
+            'avg_test_scores_mse': avg_test_scores_mse,
+            'avg_train_scores_r2': avg_train_scores_r2,
+            'avg_test_scores_r2': avg_test_scores_r2
         }
 
     return results
