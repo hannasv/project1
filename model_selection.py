@@ -13,15 +13,18 @@ __author__ = 'Hanna Svennevik', 'Paulina Tedesco'
 __email__ = 'hanna.svennevik@fys.uio.no', 'paulinatedesco@gmail.com'
 
 
+import numpy as np
+
+
 class GridSearch:
     """Determines optimal hyperparameter for given algorithm."""
 
-    def __init__(self, model, param_grid, verbose=True, random_state=None):
+    def __init__(self, model, params, name, random_state=None):
 
         self.model = model
-        self.param_grid = param_grid
-        self.verbose = True
+        self.params = params
         self.random_state = random_state
+        self.name = name
 
         # NOTE: Attribuets modified with instance.
         self.best_score = None
@@ -43,56 +46,51 @@ class GridSearch:
             return float(value)
     """
 
-    # funker denne for baae vektor og matrise???
+    @staticmethod
     def mean_squared_error(y_true, y_pred):
         """Computes the Mean Squared Error score metric."""
         mse = np.square(np.subtract(y_true, y_pred)).mean()
         # In case of matrix.
-        if mse.dim == 2:
+        if mse.ndim == 2:
             return np.sum(mse)
         else:
             return mse
 
-        # Creating a R2-square fuction: Skriv denne som above
-
+    # TODO: Creating a R2-square fuction: Skriv denne som above
+    @staticmethod # forteller klassen at den ikke trenger self.
     def r2(y, y_predict):
-        C = y - y_predict
-        val = sum(sum((y - y_predict)) ** 2) / sum(sum((y - np.mean(y)) ** 2))
+
+        C = y-y_predict
+        val = sum(sum((y-y_predict))**2)/sum(sum((y-np.mean(y))**2))
         return 1 - val
 
     def fit(self, X_train, X_test, y_train, y_test):
         """Searches for the optimal hyperparameter combination."""
-
-        name, params = self.param_grid.items()
-
+        # model and params are now lists --> sende med navn istedenfor.
         # Setup
-        self.results = {name: []}
+        self.results = {self.name: []}
         self.train_scores, self.test_scores = [], []
 
-        for num, param in enumerate(params):
-
-            # Prints an update on each round.
-            if self.verbose:
-                print('Grid search round: {}'.format(num + 1))
+        self.best_score = 0.0
+        # looper over all lamda values
+        for num, param in enumerate(self.params):
 
             # Create new model instance.
-            estimator = model(alpha=param, random_state=self.random_state)
+            estimator = self.model(lmd=param, random_state=self.random_state)
+
             # Train a model for this alpha value.
             estimator.fit(X_train, y_train)
             # Aggregate predictions to determine how `good` the model is.
             y_pred = estimator.predict(X_test)
             # Compute score.
-            score = self.mean_squared_error(y_test, y_pred)  # Lag en dictionary med r2 score ogsaa
+            score = self.mean_squared_error(y_test, y_pred)
+            # Lag en dictionary med r2 score ogsaa
+
 
             # Save best alpha and best score:
             if score > self.best_score:
                 self.best_score = score
-                self.best_param = alpha
-
-                # Prints nre bets score with param name and value.
-                if self.verbose:
-                    print('New best score: {} with param {} value: {}'
-                          ''.format(score, name, param))
+                self.best_param = param
 
             # Store both train and test scores to evaluate overfitting.
             # If train scores >> test scores ==> overfitting.
