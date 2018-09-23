@@ -27,8 +27,6 @@ class GridSearch:
         self.name = name
 
         # NOTE: Attribuets modified with instance.
-        #self.best_score = None
-        #self.best_param = None
         self.train_scores_mse = None
         self.test_scores_mse = None
         self.train_scores_r2 = None
@@ -63,7 +61,6 @@ class GridSearch:
         else:
             return mse
 
-    # TODO: Creating a R2-square fuction: Skriv denne som above
     @staticmethod # forteller klassen at den ikke trenger self.
     def r2(y_true, y_pred):
 
@@ -102,11 +99,12 @@ class GridSearch:
             # TODO: skrive bias og covariance
 
             self.avg_bootvec.append(np.mean(y_train))
+
             print(self.avg_bootvec)
 
             # ----
 
-            # Save best alpha and best score:
+            # Save best alpha and best score for each model:
             if score_mse > self.best_mse:
                 self.best_mse = score_mse
                 self.best_param_mse = param
@@ -119,7 +117,7 @@ class GridSearch:
             # Store both train and test scores to evaluate overfitting.
             # Vi trenger egentlig ikke train score
             # If train scores >> test scores ==> overfitting.
-            self.train_scores_mse.append(estimator.predict(X_train))
+            self.train_scores_mse.append(estimator.predict(X_train))  # This is not the score, it's y_pred ???
             self.test_scores_mse.append(score_mse)
 
             self.train_scores_r2.append(estimator.predict(X_train))

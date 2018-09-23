@@ -21,9 +21,10 @@ from model_selection import GridSearch
     # finne lmd verdien som er best for hvert dataset.
 
 
-def bootstrap(x):
-        bootVec = np.random.choice(x, len(x))
-        return bootVec, x  # returns x_train, x_test
+# we have another bootstrap function
+# def bootstrap(x):
+#         bootVec = np.random.choice(x, len(x))
+#         return bootVec, x  # returns x_train, x_test
 
 
 def generateDesignmatrix(p, x, y):
@@ -87,7 +88,7 @@ def train_test_split(X, z, split_size=0.2, random_state=None):
         sample for sample in row_samples
         if sample not in selected_train_samples
     ]
-    # Extract trianing and test samples based on selected
+    # Extract training and test samples based on selected
     # indices.
     X_train = X[selected_train_samples, :]
     X_test = X[selected_test_samples, :]
@@ -112,7 +113,7 @@ def model_comparison(models, param_grid, X, z, split_size=0.2, verbose=True):
     """
 
     # NOTE: Increase for more general results.
-    random_states = np.arange(4)
+    random_states = np.arange(4) # number of boots
 
     results = {}
     for name, estimator in models.items():
@@ -125,6 +126,8 @@ def model_comparison(models, param_grid, X, z, split_size=0.2, verbose=True):
 
         avg_train_scores_mse, avg_test_scores_mse = [], []
         avg_train_scores_r2, avg_test_scores_r2 = [], []
+        bias_models = []  # store the bias of each model
+        var_model = []  # store the variance of each model (this is the covariance)
         for num, random_state in enumerate(random_states):
 
             # Generate data (bootstrap sampling in your case).
@@ -153,12 +156,13 @@ def model_comparison(models, param_grid, X, z, split_size=0.2, verbose=True):
             grid = GridSearch(estimator, param_grid[name], random_state)
             grid.fit(X_train, X_test, z_train, z_test)
 
-            # Store svg score values for each model.
-            avg_train_scores_mse.append(np.mean(grid.train_scores_mse))
+            # Store average score values (over all lambdas) for each model.
+            avg_train_scores_mse.append(np.mean(grid.train_scores_mse)) # we should save the avg over all boots for the best lambda !!!
             avg_test_scores_mse.append(np.mean(grid.test_scores_mse))
 
             avg_train_scores_r2.append(np.mean(grid.train_scores_r2))
             avg_test_scores_r2.append(np.mean(grid.test_scores_r2))
+
 
         if verbose:
             print('Best average train score (mse): {}'.format(
