@@ -55,8 +55,10 @@ class GridSearchNew:
             return mse
 
     @staticmethod # forteller klassen at den ikke trenger self.
-    def r2(y_true, y_pred):
-        val = np.square(np.subtract(y_true, y_pred)).sum()/np.square(np.subtract(y_true, y_true.mean())).sum()
+    def r2_score(y_true, y_pred):
+        numerator = np.square(np.subtract(y_true, y_pred)).sum()
+        denominator = np.square(np.subtract(y_true, np.average(y_true))).sum()
+        val = numerator/denominator
         return 1 - val
 
 
@@ -98,6 +100,7 @@ class GridSearchNew:
                 X_train, X_test, z_train, z_test = train_test_split(
                     X_subset, z_subset, split_size=split_size
                 )
+
                 # TODO: May need to change axis
                 X_boot_mean.append(np.mean(X_subset, axis=1))
 
@@ -107,14 +110,14 @@ class GridSearchNew:
                 z_pred.append(estimator.predict(X_test))
                 # calculate the mse* for each loop and store the values
                 mse_boot.append(self.mean_squared_error(z_test, z_pred))
-                r2_boot.append(self.mean_squared_error(z_test, z_pred))
+                r2_boot.append(self.r2_score(z_test, z_pred))
 
             # For each lambda, save the average over boots (random_states)
             # of z_pred (which is already an average)
-            self.avg_z_pred = (np.mean(z_pred))
+            self.avg_z_pred = (np.mean(z_pred)) # kan vi ikke bare sette denne rett i if-testen?
             # also store the mse calculated as the mean of mse_boot
             self.mse = np.sum(mse_boot)/nboots
-            self.r2 = np.sum(mse_boot) / nboots
+            self.r2 = np.sum(r2_boot)/nboots
 
             # # Compute score
             # score_mse = self.mean_squared_error(y_test, y_pred)
@@ -127,12 +130,13 @@ class GridSearchNew:
 
             # for each model , save the best score (mse or r2),
             #  and the corresponding lambda and z_pred
-            if self.mse > self.best_mse:
+            if self.mse < self.best_mse: # the best mse score is close to zero
                 self.best_mse = self.mse
                 self.best_param_mse = param
                 self.best_avg_z_pred_mse = self.avg_z_pred
 
             if self.r2 > self.best_r2:
+                # the best r2 scor is close to 1.
                 self.best_r2 = self.r2
                 self.best_param_r2 = param
                 self.best_avg_z_pred_r2 = self.avg_z_pred
