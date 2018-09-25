@@ -1,5 +1,7 @@
 import numpy as np
 
+# add to master
+
 def generateDesignmatrix(p, x, y):
     m = int((p**2+3*p+2)/2)  # returnerer heltall for p = [1:5]
     X = np.zeros((len(x), m))
