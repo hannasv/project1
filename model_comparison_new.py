@@ -38,10 +38,6 @@ def model_comparison_new(models, param_grid, X, z, split_size=0.2, verbose=True)
         if verbose:
             print('Testing model: {}'.format(name))
 
-        #avg_train_scores_mse, avg_test_scores_mse = [], []
-        #avg_train_scores_r2, avg_test_scores_r2 = [], []
-
-
         # bias_models = []  # store the bias of each model
         # var_model = []  # store the variance of each model (this is the covariance)
         mse_all_models = []
