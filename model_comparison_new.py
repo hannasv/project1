@@ -54,11 +54,8 @@ def model_comparison_new(models, param_grid, X, z, split_size=0.2, verbose=True)
         r2_all_models.append(grid.r2)
 
         # Bias of best lambda calculated for each model ---> check maths!!
-        #best_bias_mse = (np.mean(z) - grid.best_avg_z_pred_mse)**2
-        #best_bias_r2 = (np.mean(z) - grid.best_avg_z_pred_mse) ** 2
-        print(grid.best_avg_z_pred_mse)
-        best_bias_mse = np.square((np.average(z) - grid.best_avg_z_pred_mse))
-        best_bias_r2 = np.square(np.average(z) - grid.best_avg_z_pred_r2)
+        best_bias_mse = (np.mean(z) - grid.best_avg_z_pred_mse)**2
+        best_bias_r2 = (np.mean(z) - grid.best_avg_z_pred_mse) ** 2
 
         # TODO: calculate the bias for all the lambdas
         # calculate covariance
