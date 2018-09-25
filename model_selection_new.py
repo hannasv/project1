@@ -46,7 +46,7 @@ class GridSearchNew:
         self.best_z_pred_mse = None
         self.best_z_pred_r2 = None
         self.nboots = None
-        #self.test = None
+        self.test = None
 
 
     @staticmethod
@@ -60,7 +60,7 @@ class GridSearchNew:
             return mse
 
     @staticmethod # forteller klassen at den ikke trenger self.
-    def r2(y_true, y_pred):
+    def r_squared(y_true, y_pred):
         val = np.square(np.subtract(y_true, y_pred)).sum()/np.square(np.subtract(y_true, y_true.mean())).sum()
         return 1 - val
 
@@ -73,7 +73,8 @@ class GridSearchNew:
         self.results = {self.name: []}
         self.train_scores_mse, self.test_scores_mse = [], []
         self.train_scores_r2, self.test_scores_r2 = [], []
-        self.best_mse = self.best_r2 = 0.0
+        self.best_mse = 500
+        self.best_r2 = -500
 
         # looper over all lamda values
         # avg_z_pred = []  # this is the average of z_pred. Each element corresponds to one lambda
@@ -109,9 +110,9 @@ class GridSearchNew:
                 self.z_pred.append(np.mean(estimator.predict(X_test)))
                 # calculate the mse* for each loop and store the values
                 mse_boot.append(self.mean_squared_error(z_test, estimator.predict(X_test)))
-                r2_boot.append(self.mean_squared_error(z_test, estimator.predict(X_test)))
+                r2_boot.append(self.r_squared(z_test, estimator.predict(X_test)))
 
-                # self.test = X_test # test dimensions
+                self.test = r2_boot  # test dimensions
 
 
             # For each lambda, save the average over boots (random_states)
@@ -119,7 +120,7 @@ class GridSearchNew:
             self.avg_z_pred = (np.mean(self.z_pred))
             # also store the mse calculated as the mean of mse_boot
             self.mse = np.sum(mse_boot)/self.nboots
-            self.r2 = np.sum(mse_boot) / self.nboots
+            self.r2 = np.sum(r2_boot)/self.nboots
 
             # # Compute score
             # score_mse = self.mean_squared_error(y_test, y_pred)
@@ -132,7 +133,7 @@ class GridSearchNew:
 
             # for each model , save the best score (mse or r2),
             #  and the corresponding lambda and z_pred
-            if self.mse > self.best_mse:
+            if self.mse < self.best_mse:
                 self.best_mse = self.mse
                 self.best_param_mse = param
                 self.best_avg_z_pred_mse = self.avg_z_pred
@@ -141,7 +142,7 @@ class GridSearchNew:
             if self.r2 > self.best_r2:
                 self.best_r2 = self.r2
                 self.best_param_r2 = param
-                self.best_z_pred_r2 = self.avg_z_pred
+                self.best_avg_z_pred_r2 = self.avg_z_pred
                 self.best_z_pred_r2 = self.z_pred
 
 

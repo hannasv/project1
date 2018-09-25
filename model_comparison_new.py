@@ -62,15 +62,15 @@ def model_comparison_new(models, param_grid, X, z, split_size=0.2, verbose=True)
         mean_z_rep = np.squeeze((np.repeat(np.mean(z), nrep)))
         best_var_mse = (np.sum((mean_z_rep - grid.best_z_pred_mse)**2))/grid.nboots
         best_var_r2 = (np.sum((mean_z_rep - grid.best_z_pred_r2)**2))/grid.nboots
-        #print(len(grid.best_z_pred_r2))
 
-        #print('X_test', grid.test.shape) # test dimensions
+        # print('mean_z_rep', (mean_z_rep), 'grid.best_z_pred_r2', (grid.best_z_pred_r2), 'diff', (np.sum((mean_z_rep - grid.best_z_pred_r2)**2))/grid.nboots)
+
+        # print('r2_boot', grid.test) # test dimensions
 
 
 
 
-        # TODO: calculate the bias for all the lambdas
-        # calculate covariance
+        # TODO: confidence intervals
 
         if verbose:
             print('Best mse score: {}'.format(grid.best_mse),
@@ -87,6 +87,7 @@ def model_comparison_new(models, param_grid, X, z, split_size=0.2, verbose=True)
             'Bias for best r2': best_bias_r2,
             'Variance for best MSE': best_var_mse,
             'Variance for best r2': best_var_r2
+
         }
 
     return results
