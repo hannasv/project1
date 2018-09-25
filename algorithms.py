@@ -50,7 +50,7 @@ class Ridge:
         self.lmd = lmd
         self.random_state = random_state
 
-        # NOTE: Varible set wtih fit method.
+        # NOTE: Variable set whith fit method.
         self.beta = None
 
     def fit(self, X, y):
