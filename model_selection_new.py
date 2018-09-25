@@ -116,10 +116,6 @@ class GridSearchNew:
             self.mse = np.sum(mse_boot)/nboots
             self.r2 = np.sum(mse_boot) / nboots
 
-            # # Compute score
-            # score_mse = self.mean_squared_error(y_test, y_pred)
-            # score_r2 = self.r2(y_test, y_pred)
-
 
             #----
             # TODO: skrive bias og covariance
