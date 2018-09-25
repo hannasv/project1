@@ -57,20 +57,8 @@ def model_comparison_new(models, param_grid, X, z, split_size=0.2, verbose=True)
         best_bias_mse = (np.mean(z) - grid.best_avg_z_pred_mse)**2
         best_bias_r2 = (np.mean(z) - grid.best_avg_z_pred_mse) ** 2
 
-        # # Variance of best lambda calculated for each model ---> check maths!!
-        nrep = len(grid.best_z_pred_mse)
-        mean_z_rep = np.squeeze((np.repeat(np.mean(z), nrep)))
-        best_var_mse = (np.sum((mean_z_rep - grid.best_z_pred_mse)**2))/grid.nboots
-        best_var_r2 = (np.sum((mean_z_rep - grid.best_z_pred_r2)**2))/grid.nboots
-
-        # print('mean_z_rep', (mean_z_rep), 'grid.best_z_pred_r2', (grid.best_z_pred_r2), 'diff', (np.sum((mean_z_rep - grid.best_z_pred_r2)**2))/grid.nboots)
-
-        # print('r2_boot', grid.test) # test dimensions
-
-
-
-
-        # TODO: confidence intervals
+        # TODO: calculate the bias for all the lambdas
+        # calculate covariance
 
         if verbose:
             print('Best mse score: {}'.format(grid.best_mse),
@@ -84,10 +72,7 @@ def model_comparison_new(models, param_grid, X, z, split_size=0.2, verbose=True)
             'Best r2': grid.best_r2,
             'Best r2 lambda': grid.best_param_r2,
             'Bias for best MSE': best_bias_mse,
-            'Bias for best r2': best_bias_r2,
-            'Variance for best MSE': best_var_mse,
-            'Variance for best r2': best_var_r2
-
+            'Bias for best r2': best_bias_r2
         }
 
     return results
