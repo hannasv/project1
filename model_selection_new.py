@@ -80,7 +80,7 @@ class GridSearchNew:
         # avg_z_pred = []  # this is the average of z_pred. Each element corresponds to one lambda
         for num, param in enumerate(self.params):
 
-            self.nboots = 4
+            self.nboots = 100
             random_states = np.arange(self.nboots)  # number of boots
 
 
