@@ -61,6 +61,7 @@ def train_test_split(X, z, split_size=0.2, random_state=None):
         sample for sample in row_samples
         if sample not in selected_train_samples
     ]
+
     # Extract training and test samples based on selected
     # indices.
     X_train = X[selected_train_samples, :]
@@ -69,3 +70,19 @@ def train_test_split(X, z, split_size=0.2, random_state=None):
     z_test = z[selected_test_samples]
 
     return X_train, X_test, z_train, z_test
+
+
+def mean_squared_error(y_true, y_pred):
+    """Computes the Mean Squared Error score metric."""
+    mse = np.square(np.subtract(y_true, y_pred)).mean()
+    # In case of matrix.
+    if mse.ndim == 2:
+        return np.sum(mse)
+    else:
+        return mse
+
+def r2_score(y_true, y_pred):
+    numerator = np.square(np.subtract(y_true, y_pred)).sum()
+    denominator = np.square(np.subtract(y_true, np.average(y_true))).sum()
+    val = numerator/denominator
+    return 1 - val
