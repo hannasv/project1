@@ -36,7 +36,7 @@ class OLS:
 
     def predict(self, X):
         """Aggregate model predictions """
-        return X @ self.beta
+        return X @ self.coef_
 
                #print(y)
         #term1 =  np.dot(X.T, y)
@@ -59,7 +59,7 @@ class Ridge:
 
     def predict(self, X):
         """Aggregate model predictions."""
-        return X @ self.beta
+        return X @ self.coef_
 
 
 class Lasso:

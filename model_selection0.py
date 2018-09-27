@@ -53,7 +53,7 @@ class GridSearchNew:
 
         # Splitting our original dataset into test and train.
         X_train, X_test, z_train, z_test = train_test_split(
-            X, z, split_size=split_size
+            X, z, split_size=split_size, random_state=105
         )
 
         " Returning these dictionaries to plot mse vs model"

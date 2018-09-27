@@ -62,8 +62,8 @@ def train_test_split(X, z, split_size=0.2, random_state=None):
         if sample not in selected_train_samples
     ]
 
-    if (selected_test_samples & selected_train_samples):
-        print("  The selected test and train sample are not disjoint, abort! ")
+    # if (selected_test_samples & selected_train_samples):
+    #     print("  The selected test and train sample are not disjoint, abort! ")
 
     # Extract training and test samples based on selected
     # indices.
