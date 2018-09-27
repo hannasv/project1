@@ -50,13 +50,14 @@ class Ridge:
         self.lmd = lmd
         self.random_state = random_state
 
-        # NOTE: Varible set wtih fit method.
+        # NOTE: Variable set whith fit method.
         self.beta = None
 
     def fit(self, X, y):
         """Train the model."""
 
-        self.beta = linalg.inv(X.T@ X - self.lmd*np.identity(X.shape[1])@X.T@y)
+        #self.beta = linalg.inv(X.T@ X - self.lmd*np.identity(X.shape[1])@X.T@y)
+        self.beta = linalg.inv(X.T @ X + self.lmd * np.identity(X.shape[1])) @ X.T @ y
 
     def predict(self, X):
         """Aggregate model predictions."""

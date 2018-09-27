@@ -29,7 +29,6 @@ class GridSearchNew:
     def __init__(self, model, params, name):
         self.model = model
         self.params = params
-        #self.random_state = random_state
         self.name = name
 
         # NOTE: Attribuets modified with instance.
@@ -46,6 +45,7 @@ class GridSearchNew:
         self.best_avg_z_pred_r2 = None
         self.mse = None
         self.r2 = None
+        print("created a estimator")
 
     def fit(self, X, z, split_size):
         """Searches for the optimal hyperparameter combination."""
@@ -54,7 +54,8 @@ class GridSearchNew:
         self.results = {self.name: []}
         self.train_scores_mse, self.test_scores_mse = [], []
         self.train_scores_r2, self.test_scores_r2 = [], []
-        self.best_mse = self.best_r2 = 0.0
+        self.best_mse = 50
+        self.best_r2 = -50
 
         # Splitting our original dataset into test and train.
         X_train, X_test, z_train, z_test = train_test_split(
@@ -62,20 +63,27 @@ class GridSearchNew:
         )
 
         " Returning these dictionaries to plot mse vs model"
-        self.mse = {"ridge":[], "ols": [], "lasso":[]}
-        self.r2 = {"ridge":[], "ols": [], "lasso":[]}
-        self.z_red = []
-
+        self.mse = []
+        #{"ridge":[], "ols": [], "lasso":[]}
+        self.r2 = []
+        #{"ridge":[], "ols": [], "lasso":[]}
+        self.z_pred = []
+        print(self.params)
         # For en model tester vi alle parameterne og returnerer denne.
-        for param in params:
+        for param in self.params:
+            print("lambda: " + str(param))
             estimator = self.model(lmd = param)
             # Train a model for this pair of lambda and random state
             estimator.fit(X_train, z_train)
-            mse[name].append(mean_squared_error(z_test, z_pred))
-            r2[name].append(r2_score(z_test, z_pred))
-            z_pred.append(estimator.predict(X_test))
+            temp = estimator.predict(X_test)
+            self.mse.append(mean_squared_error(z_test, temp))
+            self.r2.append(r2_score(z_test, temp))
+            self.z_pred.append(temp)
+
+            print(len(self.mse))
 
             "Les gjennom dette igjen..."
+            """
             if self.mse < self.best_mse: # the best mse score is close to zero
                 self.best_mse = self.mse
                 self.best_param_mse = param
@@ -86,5 +94,5 @@ class GridSearchNew:
                 self.best_r2 = self.r2
                 self.best_param_r2 = param
                 self.best_avg_z_pred_r2 = self.avg_z_pred
-
-            return self
+            """
+        return self
