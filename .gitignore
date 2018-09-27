@@ -55,3 +55,4 @@ doc/Programs/ParallelizationMPI/dill10
 
 doc/pub/*
 project1.ipynb
+*.pyc

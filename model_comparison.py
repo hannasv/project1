@@ -187,33 +187,3 @@ def model_comparison(models, param_grid, X, z, split_size=0.2, verbose=True):
         }
 
     return results
-
-
-
-"""
-if __name__ == '__main__':
-    # Demo run
-
-    # A collection of algorithm name : algorithm.
-    models = {
-        "ols": algorithms.OLS,
-        'ridge': algorithms.Ridge,
-        #'lasso': sklearn.Lasso
-        "lasso": algorithms.Lasso
-    }
-    param_grid = {
-        "ols": [0]
-        # Ridge alpha params.
-        'ridge': [0.01, 0.1, 1.0, 10.0],
-        # Lasso alpha params.
-        'lasso': [0.01, 0.1, 1.0, 5.0]
-    }
-    random_states = np.arange(40)
-    # Perform experiment and collect results.
-    model_results = model_comparison(
-        models, param_grid, X, y, random_states
-    )
-    # NOTE:
-    # This procedure you can extent to return std of score and create a validation curve:
-    # such as in https://chrisalbon.com/machine_learning/model_evaluation/plot_the_validation_curve/
-"""
