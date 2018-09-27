@@ -14,7 +14,6 @@ variance = (np.sum((x - mu)**2))/(n-1)
 # Test for the variance score
 test_variance=(x.var(ddof=1))
 
-
 # Confidence interval
 sigma = np.sqrt(variance)
 se = sigma/np.sqrt(n)
@@ -25,4 +24,3 @@ ci_low = mu - t_val*se
 
 # Test intervals
 st.t.interval(0.95, n-1, loc=mu, scale=st.sem(x))
-

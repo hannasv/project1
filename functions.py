@@ -1,7 +1,5 @@
 import numpy as np
 
-# add to master
-
 def generateDesignmatrix(p, x, y):
     m = int((p**2+3*p+2)/2)  # returnerer heltall for p = [1:5]
     X = np.zeros((len(x), m))
@@ -88,3 +86,21 @@ def r2_score(y_true, y_pred):
     denominator = np.square(np.subtract(y_true, np.average(y_true))).sum()
     val = numerator/denominator
     return 1 - val
+
+def variance(x):
+    n = len(x)
+    mu = np.sum(x)/n
+    var = np.sum((x - mu)**2)/(n-1)
+    return var
+
+def ci(x):
+    """  Calculating the confidence intervals """
+    n = len(x)
+    mu = np.sum(x)/n
+    sigma = np.sqrt(variance)
+    se = sigma/np.sqrt(n)
+    p = 0.025
+    t_val = stats.t.ppf(1-p, n-1)
+    ci_up = mu + t_val*se
+    ci_low = mu - t_val*se
+    return ci_low, ci_up

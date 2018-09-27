@@ -1,7 +1,17 @@
-from function import bootstrap, train_test_split,
+from function import bootstrap, train_test_split, variance, ci
 
-def model_resample(model, lmd, X, y, nboots, split_size = 0.2):
+
+# send in dictionaries with their best lmd values.
+
+def model_resample(models, lmd, X, z, nboots, split_size = 0.2):
+""" lmd is a dictionarie of regression methods (name) with their corresponding best hyperparam """
+
+    z_true_mean = z.mean()
+
     random_states = np.arange(nboots)  # number of boots
+    mse = { "ridge":[], "lasso":[], "ols":[]}
+    r2 = { "ridge":[], "lasso":[], "ols":[]}
+    z_pred = { "ridge":[], "lasso":[], "ols":[]} # mean av alle b0
 
     for random_state in random_states:
 
@@ -11,21 +21,31 @@ def model_resample(model, lmd, X, y, nboots, split_size = 0.2):
             X_subset, z_subset, split_size=split_size
         )
 
-        for model in models:
+        for name, estimator in models.items():
+            estimator = self.model(lmd[name])
+            # Train a model for this pair of lambda and random state
+            estimator.fit(X_train, z_train)
+            temp = estimator.predict(X_test)
+            mse[name].append(mean_squared_error(z_test, temp))
+            r2[name].append(r2_score(z_test, temp))
+            z_pred[name].append(temp)
 
+    mse_avg = {"ridge": mse["ridge"].mean(),"lasso": mse["lasso"].mean(),"ols": mse["ols"].mean() }
+    r2_avg = {"ridge": r2["ridge"].mean(),"lasso": r2["lasso"].mean(),"ols": r2["ols"].mean() }
 
+    # for hver boot --> calculate mean betas.
+    for z in z_pred[name]:
+        z_pred_mean = z.mean()
 
+    bias = abs(z_true_mean - z_pred_mean.mean())
+    model_variance =
 
-    # For each lambda, save the average over boots (random_states)
-    # of z_pred (which is already an average)
-    self.avg_z_pred = (np.mean(z_pred)) # kan vi ikke bare sette denne rett i if-testen?
-    # also store the mse calculated as the mean of mse_boot
-    self.mse = np.sum(mse_boot)/nboots
-    self.r2 = np.sum(r2_boot)/nboots
+    """ For hver boot tar vi z_pred -z_pred.mean() --> summerer over alle bots/nrBoots """
 
-    # # Compute score
-    # score_mse = self.mean_squared_error(y_test, y_pred)
-    # score_r2 = self.r2(y_test, y_pred)
+    # Calculate variance of all
+    #variance = {"ridge": var(z_pred["ridge"].mean()),"lasso": mse["lasso"].mean(),"ols": mse["ols"].mean() }
 
+    # bruker variancen av alle Beta0
+    #ci = {"ridge": r2["ridge"].mean(),"lasso": r2["lasso"].mean(),"ols": r2["ols"].mean() }
 
-    return
+    return mse_avg, r2_avg, bias
