@@ -28,11 +28,11 @@ class OLS:
         self.lmd = lmd
 
         # NOTE: Variable set with fit method.
-        self.beta = None
+        self.coef_ = None
 
     def fit(self, X, y):
         """Train the model"""
-        self.beta = sp.linalg.inv(X.T @ X)@ X.T @ y
+        self.coef_ = sp.linalg.inv(X.T @ X)@ X.T @ y
 
     def predict(self, X):
         """Aggregate model predictions """
@@ -49,15 +49,13 @@ class Ridge:
     def __init__(self, lmd, random_state=None):
         self.lmd = lmd
         self.random_state = random_state
-
         # NOTE: Variable set whith fit method.
-        self.beta = None
+        self.coef_ = None
 
     def fit(self, X, y):
         """Train the model."""
-
         #self.beta = linalg.inv(X.T@ X - self.lmd*np.identity(X.shape[1])@X.T@y)
-        self.beta = linalg.inv(X.T @ X + self.lmd * np.identity(X.shape[1])) @ X.T @ y
+        self.coef_ = linalg.inv(X.T @ X + self.lmd * np.identity(X.shape[1])) @ X.T @ y
 
     def predict(self, X):
         """Aggregate model predictions."""
@@ -77,8 +75,6 @@ class Lasso:
         """Train the model."""
         self.model = linear_model.Lasso(self.lmd)
         self.model.fit(X, y)
-
-        return self
 
     def predict(self, X):
         """Aggregate model predictions."""

@@ -17,6 +17,7 @@ import numpy as np
 from functions import bootstrap, mean_squared_error, train_test_split, r2_score
 
 class GridSearchNew:
+
     """
     Determines optimal hyperparameter for given algorithm, without resampling.
     Returns dict = {
@@ -30,12 +31,6 @@ class GridSearchNew:
         self.model = model
         self.params = params
         self.name = name
-
-        # NOTE: Attribuets modified with instance.
-        # self.train_scores_mse = None
-        # self.test_scores_mse = None
-        # self.train_scores_r2 = None
-        # self.test_scores_r2 = None
         self.best_mse = None
         self.best_r2 = None
         self.best_param_mse = None
@@ -45,7 +40,6 @@ class GridSearchNew:
         self.best_avg_z_pred_r2 = None
         self.mse = None
         self.r2 = None
-        print("created a estimator")
 
     def fit(self, X, z, split_size):
         """Searches for the optimal hyperparameter combination."""
@@ -64,14 +58,10 @@ class GridSearchNew:
 
         " Returning these dictionaries to plot mse vs model"
         self.mse = []
-        #{"ridge":[], "ols": [], "lasso":[]}
         self.r2 = []
-        #{"ridge":[], "ols": [], "lasso":[]}
         self.z_pred = []
-        print(self.params)
         # For en model tester vi alle parameterne og returnerer denne.
         for param in self.params:
-            print("lambda: " + str(param))
             estimator = self.model(lmd = param)
             # Train a model for this pair of lambda and random state
             estimator.fit(X_train, z_train)
@@ -80,19 +70,4 @@ class GridSearchNew:
             self.r2.append(r2_score(z_test, temp))
             self.z_pred.append(temp)
 
-            print(len(self.mse))
-
-            "Les gjennom dette igjen..."
-            """
-            if self.mse < self.best_mse: # the best mse score is close to zero
-                self.best_mse = self.mse
-                self.best_param_mse = param
-                self.best_avg_z_pred_mse = self.avg_z_pred
-
-            if self.r2 > self.best_r2:
-                # the best r2 scor is close to 1.
-                self.best_r2 = self.r2
-                self.best_param_r2 = param
-                self.best_avg_z_pred_r2 = self.avg_z_pred
-            """
         return self

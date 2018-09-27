@@ -1,7 +1,5 @@
 import numpy as np
 
-# add to master
-
 def generateDesignmatrix(p, x, y):
     m = int((p**2+3*p+2)/2)  # returnerer heltall for p = [1:5]
     X = np.zeros((len(x), m))
@@ -14,7 +12,7 @@ def generateDesignmatrix(p, x, y):
     return X
 
 
-def frankeFunction(x, y):
+def franke_function(x, y):
     term1 = 0.75*np.exp(-(0.25*(9*x-2)**2) - 0.25*((9*y-2)**2))
     term2 = 0.75*np.exp(-((9*x+1)**2)/49.0 - 0.1*(9*y+1))
     term3 = 0.5*np.exp(-(9*x-7)**2/4.0 - 0.25*((9*y-3)**2))
@@ -64,6 +62,9 @@ def train_test_split(X, z, split_size=0.2, random_state=None):
         if sample not in selected_train_samples
     ]
 
+    if (selected_test_samples & selected_train_samples):
+        print("  The selected test and train sample are not disjoint, abort! ")
+
     # Extract training and test samples based on selected
     # indices.
     X_train = X[selected_train_samples, :]
@@ -88,3 +89,21 @@ def r2_score(y_true, y_pred):
     denominator = np.square(np.subtract(y_true, np.average(y_true))).sum()
     val = numerator/denominator
     return 1 - val
+
+def variance(x):
+    n = len(x)
+    mu = np.sum(x)/n
+    var = np.sum((x - mu)**2)/(n-1)
+    return var
+
+def ci(x):
+    """  Calculating the confidence intervals """
+    n = len(x)
+    mu = np.sum(x)/n
+    sigma = np.sqrt(variance(x))
+    se = sigma/np.sqrt(n)
+    p = 0.025
+    t_val = stats.t.ppf(1-p, n-1)
+    ci_up = mu + t_val*se
+    ci_low = mu - t_val*se
+    return ci_low, ci_up
