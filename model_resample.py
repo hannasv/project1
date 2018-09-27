@@ -34,18 +34,20 @@ def model_resample(models, lmd, X, z, nboots, split_size = 0.2):
     r2_avg = {"ridge": r2["ridge"].mean(),"lasso": r2["lasso"].mean(),"ols": r2["ols"].mean() }
 
     # for hver boot --> calculate mean betas.
-    for z in z_pred[name]:
-        z_pred_mean = z.mean()
+    z_pred_mean = [z.mean() for z in z_pred[name]]
 
     bias = abs(z_true_mean - z_pred_mean.mean())
-    model_variance =
+    model_variance = np.sum(z_pred[name] - z_pred_mean)/nrBoots
 
     """ For hver boot tar vi z_pred -z_pred.mean() --> summerer over alle bots/nrBoots """
 
     # Calculate variance of all
     #variance = {"ridge": var(z_pred["ridge"].mean()),"lasso": mse["lasso"].mean(),"ols": mse["ols"].mean() }
 
-    # bruker variancen av alle Beta0
-    #ci = {"ridge": r2["ridge"].mean(),"lasso": r2["lasso"].mean(),"ols": r2["ols"].mean() }
 
-    return mse_avg, r2_avg, bias
+# lag dette ci(beta) --Z let i gridsearch
+
+    # bruker variancen av alle Beta0
+    ci = {"ridge": r2["ridge"].mean(),"lasso": r2["lasso"].mean(),"ols": r2["ols"].mean() }
+
+    return mse_avg, r2_avg, bias, model_variance
