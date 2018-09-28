@@ -70,11 +70,13 @@ class Lasso:
         self.lmd = lmd
         self.random_state = random_state
         self.model = None
+        self.coef_ = None
 
     def fit(self, X, y):
         """Train the model."""
         self.model = linear_model.Lasso(self.lmd)
         self.model.fit(X, y)
+        self.coef_ = self.model.coef_
 
     def predict(self, X):
         """Aggregate model predictions."""
