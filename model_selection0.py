@@ -20,11 +20,7 @@ class GridSearchNew:
 
     """
     Determines optimal hyperparameter for given algorithm, without resampling.
-    Returns dict = {
-                    "rigde": [mse, r2, var]
-                    "OLS": [mse, r2, var]
-                    "lasso":[mse, r2, var]
-    }
+
     """
 
     def __init__(self, model, params, name):
@@ -48,8 +44,6 @@ class GridSearchNew:
         self.results = {self.name: []}
         self.train_scores_mse, self.test_scores_mse = [], []
         self.train_scores_r2, self.test_scores_r2 = [], []
-        self.best_mse = 50
-        self.best_r2 = -50
 
         # Splitting our original dataset into test and train.
         X_train, X_test, z_train, z_test = train_test_split(
@@ -62,7 +56,7 @@ class GridSearchNew:
         self.z_pred = []
         # For en model tester vi alle parameterne og returnerer denne.
         for param in self.params:
-            estimator = self.model(lmd = param)
+            estimator = self.model(lmd=param)
             # Train a model for this pair of lambda and random state
             estimator.fit(X_train, z_train)
             temp = estimator.predict(X_test)

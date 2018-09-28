@@ -34,7 +34,7 @@ def model_comparison0(models, param_grid, X, z, split_size=0.2, verbose=True):
     mse = {
         'ridge': [],
         'lasso': [],
-        "ols":[]
+        "ols": []
     }
 
     r2 = {
