@@ -1,4 +1,4 @@
-from functions import bootstrap, train_test_split, variance, mean_squared_error, r2_score
+from functions import bootstrap, train_test_split, variance, mean_squared_error, r2_score, ci
 import numpy as np
 
 # send in dictionaries with their best lmd values.
@@ -68,11 +68,13 @@ def model_resample(models, lmd, X, z, nboots, split_size = 0.2):
     # print(np.array(z_pred_mean).mean().shape)
     # print(z_true_mean.shape)
 
-    beta0_mean["ridge"] = np.mean(np.array(beta["ridge"])[0, :])
-    beta0_mean["lasso"] = np.mean(np.array(beta["lasso"])[0, :])
-    beta0_mean["ols"] = np.mean(np.array(beta["ols"])[0, :])
+    beta0_mean["ridge"] = np.array(beta["ridge"]).mean(axis=0)
+    beta0_mean["lasso"] = np.array(beta["lasso"]).mean(axis=0)
+    beta0_mean["ols"] = np.array(beta["ols"]).mean(axis=0)
     # bruker variancen av alle Beta0
 
-    #ci = {"ridge": ci(np.array(beta0_mean["ridge"])), "lasso": ci(np.array(beta0_mean["lasso"])), "ols": ci(np.array(beta0_mean["ols"]))}
+    print(np.array(beta0_mean["ols"]).shape)
 
-    return mse_avg, r2_avg, bias, model_variance
+    ci_coefs = {"ridge": ci(np.array(beta0_mean["ridge"])), "lasso": ci(np.array(beta0_mean["lasso"])), "ols": ci(np.array(beta0_mean["ols"]))}
+
+    return mse_avg, r2_avg, bias, model_variance, ci_coefs
