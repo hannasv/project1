@@ -19,6 +19,8 @@ def model_resample(models, lmd, X, z, nboots, split_size = 0.2):
     mse = {"ridge": [], "lasso": [], "ols": []}
     r2 = {"ridge": [], "lasso": [], "ols": []}
     z_pred = {"ridge": [], "lasso": [], "ols": []}  # mean av alle b0
+    bias = {"ridge": [], "lasso": [], "ols": []}
+    model_variance = {"ridge": [], "lasso": [], "ols": []}
     beta = {"ridge": [], "lasso": [], "ols": []}
     beta0_mean = {"ridge": [], "lasso": [], "ols": []}
 
@@ -45,12 +47,26 @@ def model_resample(models, lmd, X, z, nboots, split_size = 0.2):
     mse_avg = {"ridge": np.array(mse["ridge"]).mean(),"lasso": np.array(mse["lasso"]).mean(),"ols": np.array(mse["ols"]).mean() }
     r2_avg = {"ridge": np.array(r2["ridge"]).mean(),"lasso": np.array(r2["lasso"]).mean(),"ols": np.array(r2["ols"]).mean() }
 
-    z_pred_mean = [np.array(z).mean() for z in z_pred[name]]  # this is te mean for all the boots
-    bias = abs(z_true_mean - np.array(z_pred_mean).mean())
-    #model_variance = np.sum(np.array(z_pred[name]) - z_pred_mean)/nboots
+    # z_pred_mean = [np.array(z).mean() for z in z_pred[name]]  # this is te mean for all the boots
+    # bias = abs(z_true_mean - np.array(z_pred_mean).mean())
+    # model_variance = np.sum(np.array(z_pred_mean) - np.array(z_pred_mean).mean())/nboots
 
-    print(np.array(z_pred['lasso']).shape)
-    print(temp.shape)
+    for name, model in models.items():
+        print(name)
+        z_pred_mean = [np.array(z).mean() for z in z_pred[name]]
+        # z_pred_mean = np.array(z).mean()
+        bias[name] = abs(z_true_mean - np.array(z_pred_mean).mean())
+        model_variance[name] = np.sum(np.array(z_pred_mean) - np.array(z_pred_mean).mean()) / nboots
+
+    # print(np.array(z_pred_mean))
+    # print(z_pred[name])
+
+
+
+
+    # print(np.array(z_pred_mean).shape)
+    # print(np.array(z_pred_mean).mean().shape)
+    # print(z_true_mean.shape)
 
     beta0_mean["ridge"] = np.mean(np.array(beta["ridge"])[0, :])
     beta0_mean["lasso"] = np.mean(np.array(beta["lasso"])[0, :])
@@ -59,4 +75,4 @@ def model_resample(models, lmd, X, z, nboots, split_size = 0.2):
 
     #ci = {"ridge": ci(np.array(beta0_mean["ridge"])), "lasso": ci(np.array(beta0_mean["lasso"])), "ols": ci(np.array(beta0_mean["ols"]))}
 
-    return mse_avg, r2_avg, bias
+    return mse_avg, r2_avg, bias, model_variance
