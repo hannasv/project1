@@ -42,6 +42,13 @@ def model_comparison0(models, param_grid, X, z, split_size=0.2, verbose=True):
         'lasso': [],
         "ols": []
     }
+
+    z_pred_best = {
+        'ridge': [],
+        'lasso': [],
+        "ols": []
+    }
+
     for name, estimator in models.items():
 
         if verbose:
@@ -54,6 +61,11 @@ def model_comparison0(models, param_grid, X, z, split_size=0.2, verbose=True):
         mse[name].append(grid.mse)
         r2[name].append(grid.r2)
 
+        # find best mse
+        mn, idx = min((grid.mse[i], i) for i in range(len(grid.mse)))
+        print(idx)
+        z_pred_best[name] = grid.z_pred[idx]
+
     results = {"mse": mse, "r2": r2}
 
-    return results
+    return results, z_pred_best
