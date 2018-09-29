@@ -1,4 +1,6 @@
 import numpy as np
+from scipy import stats
+import scipy.stats as st
 
 def generateDesignmatrix(p, x, y):
     m = int((p**2+3*p+2)/2)  # returnerer heltall for p = [1:5]
@@ -21,21 +23,27 @@ def franke_function(x, y):
 
 
 def bootstrap(X, z, random_state):
-
+    print("z.shape in: " + str(np.shape(z))) # this  is correct
+    print("X.shape in: " + str(np.shape(X))) # this  is correct
     # For random randint
     np.random.seed(random_state)
 
     nrows, ncols = np.shape(X)
 
     selected_rows = np.random.randint(
-        low=0, high=nrows, size=(nrows, ncols)
+        low=0, high=nrows, size=nrows
     )
-    selected_cols = np.random.randint(
-        low=0, high=ncols, size=(nrows, ncols)
-    )
-    X_subset = X[selected_rows, selected_cols]
-    z_subset = z[selected_rows]
 
+    selected_cols = np.random.randint(
+        low=0, high=ncols, size=ncols
+    )
+
+    z_subset = z[selected_rows]
+    X_subset = np.zeros((nrows, ncols))
+    counter = 0
+    for element in selected_cols:
+        X_subset[:, counter] = X[selected_rows, element]
+        counter += 1
     return X_subset, z_subset
 
 
@@ -97,7 +105,7 @@ def variance(x):
     return var
 
 def ci(x):
-    """  Calculating the confidence intervals """
+    """  Calculating the confidence intervals of regression coefficients  """
     n = len(x)
     mu = np.sum(x)/n
     sigma = np.sqrt(variance(x))

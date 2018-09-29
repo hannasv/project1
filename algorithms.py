@@ -33,6 +33,7 @@ class OLS:
     def fit(self, X, y):
         """Train the model"""
         self.coef_ = sp.linalg.inv(X.T @ X)@ X.T @ y
+        print("not singular")
 
     def predict(self, X):
         """Aggregate model predictions """
@@ -54,7 +55,6 @@ class Ridge:
 
     def fit(self, X, y):
         """Train the model."""
-        #self.beta = linalg.inv(X.T@ X - self.lmd*np.identity(X.shape[1])@X.T@y)
         self.coef_ = linalg.inv(X.T @ X + self.lmd * np.identity(X.shape[1])) @ X.T @ y
 
     def predict(self, X):
@@ -80,5 +80,4 @@ class Lasso:
 
     def predict(self, X):
         """Aggregate model predictions."""
-
         return self.model.predict(X)
