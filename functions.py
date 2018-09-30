@@ -1,6 +1,7 @@
 import numpy as np
 from scipy import stats
 import scipy.stats as st
+from resample.bootstrap import bootstrap
 
 def generateDesignmatrix(p, x, y):
     m = int((p**2+3*p+2)/2)  # returnerer heltall for p = [1:5]
@@ -23,10 +24,9 @@ def franke_function(x, y):
 
 
 def bootstrap(X, z, random_state):
-    print("z.shape in: " + str(np.shape(z))) # this  is correct
-    print("X.shape in: " + str(np.shape(X))) # this  is correct
+
     # For random randint
-    np.random.seed(random_state)
+    rgen = np.random.RandomState(random_state)
 
     nrows, ncols = np.shape(X)
 
@@ -34,16 +34,9 @@ def bootstrap(X, z, random_state):
         low=0, high=nrows, size=nrows
     )
 
-    selected_cols = np.random.randint(
-        low=0, high=ncols, size=ncols
-    )
-
     z_subset = z[selected_rows]
-    X_subset = np.zeros((nrows, ncols))
-    counter = 0
-    for element in selected_cols:
-        X_subset[:, counter] = X[selected_rows, element]
-        counter += 1
+    X_subset = X[selected_rows, :]
+
     return X_subset, z_subset
 
 
@@ -70,11 +63,6 @@ def train_test_split(X, z, split_size=0.2, random_state=None):
         if sample not in selected_train_samples
     ]
 
-    # if (selected_test_samples & selected_train_samples):
-    #     print("  The selected test and train sample are not disjoint, abort! ")
-
-    # Extract training and test samples based on selected
-    # indices.
     X_train = X[selected_train_samples, :]
     X_test = X[selected_test_samples, :]
     z_train = z[selected_train_samples]
