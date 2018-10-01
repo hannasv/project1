@@ -1,4 +1,4 @@
-from functions import bootstrap, train_test_split, variance, mean_squared_error, r2_score, ci
+from utils import bootstrap, train_test_split, variance, mean_squared_error, r2_score, ci, bias, model_variance
 import numpy as np
 import pandas as pd
 
@@ -42,5 +42,7 @@ def model_resample(models, lmd, X, z, nboots, split_size = 0.2):
 
     mse_avg = {"ridge": np.array(mse["ridge"]).mean(),"lasso": np.array(mse["lasso"]).mean(),"ols": np.array(mse["ols"]).mean() }
     r2_avg = {"ridge": np.array(r2["ridge"]).mean(),"lasso": np.array(r2["lasso"]).mean(),"ols": np.array(r2["ols"]).mean() }
+    bias_model = {"ridge": bias(z_true_mean, z_pred["ridge"]), "ols":bias(z_true_mean, z_pred["ols"]), "lasso": bias(z_true_mean, z_pred["lasso"])}
+    mv = {"ridge": model_variance(z_pred["ridge"], nboots), "ols":model_variance(z_pred["ols"], nboots), "lasso":model_variance(z_pred["lasso"], nboots)}
 
-    return mse_avg, r2_avg, reg_coeffs, z_pred
+    return mse_avg, r2_avg, reg_coeffs, bias_model, mv
