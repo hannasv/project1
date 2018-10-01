@@ -1,0 +1,17 @@
+We have structured the solution in to two parts. The first part is finding the optimal hyperparameter lambda. This is done
+with a call to the model_comparison function this creates one instance of a gridsearch object for each regression method
+givan as a input. The gridsearch object fits all of the method a returns itself. This object have all of the variables
+saved and they can easily be accessed in model_comparison which returns a dictionary of the metrics found by the gridsearch.
+
+The second part of the problem which include resampling and calculations of average mse, r2, model_variance
+and bias of the model. This can be solved by making a call to model_resample() which will .
+In addition to this we have made two scipts one containing varios functions called from model_comparison, model_selection, model_resample
+and the notebooks. And one script containing unittest for the utilities. In order to execute the tests you make the
+following call in your command line.
+
+\begin{python}
+pytest test.py
+\end{python}
+
+
+\include{pythonhighlight}

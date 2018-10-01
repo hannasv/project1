@@ -10,7 +10,7 @@ from sklearn.pipeline import make_pipeline
 import algorithms
 import model_selection_new
 from model_comparison_new import model_comparison_new
-from functions import generateDesignmatrix, franke_function, train_test_split
+from utils import generateDesignmatrix, franke_function, train_test_split
 
 np.random.seed(1000)
 m = 30  # m defines the size of the meshgrid.
@@ -79,3 +79,13 @@ def test_ridge():
     scikit_ridge=linear_model.RidgeCV(alphas=[0.1], fit_intercept=False)
     scikit_ridge.fit(X, z)
     assert  np.all(abs( our_betas == scikit_ridge.coef_[:])<1e8)
+
+
+def test_split():
+    # train_test_split(X, z, split_size=0.2, random_state=None)
+    
+    assert
+
+
+def test_bootstrap():
+    assert

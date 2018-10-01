@@ -1,11 +1,7 @@
 import numpy as np
-<<<<<<< HEAD
-import scipy.stats as st
-=======
 from scipy import stats
 import scipy.stats as st
 from resample.bootstrap import bootstrap
->>>>>>> cat
 
 def generateDesignmatrix(p, x, y):
     m = int((p**2+3*p+2)/2)  # returnerer heltall for p = [1:5]
@@ -103,7 +99,67 @@ def ci(x):
     sigma = np.sqrt(variance(x))
     se = sigma/np.sqrt(n)
     p = 0.025
-    t_val = st.t.ppf(1-p, n-1)
+    t_val = stats.t.ppf(1-p, n-1)
     ci_up = mu + t_val*se
     ci_low = mu - t_val*se
     return ci_low, ci_up
+
+def clean_reg_coeff(X, reg_coeff, nboots):
+    B_r = np.zeros(( X.shape[1] , nboots))
+    B_l = np.zeros(( X.shape[1] , nboots))
+    B_o = np.zeros(( X.shape[1] , nboots))
+
+    for i in range(nboots):
+        B_r[:, i] = df[i]["ridge"]
+        B_l[:, i] = df[i]["lasso"]
+        B_o[:,i] = df[i]["ols"]
+
+    m = np.array([B_r[i,:].mean() for i in range(nrCoeff)])
+    h = np.array([ci(B_r[i,:])[1] for i in range(nrCoeff)])
+    l = np.array([ci(B_r[i,:])[0] for i in range(nrCoeff)])
+    return m,l,h
+
+def plotCI(X, B_r, B_l, B_o):
+    fig, ax = plt.subplots(figsize = (8,6))
+    nrCoeff = X.shape[1]
+    x = np.arange(nrCoeff)
+
+    m,l,h = cleanCI(B_r)
+    ml,ll,hl = cleanCI(B_l)
+    mo, lo, ho = cleanCI(B_o)
+
+    ax.fill_between(x, l, h, where = h>l, alpha = 0.3, interpolate = True)
+    ax.fill_between(x, ll, hl, where = hl>ll,facecolor = "red", alpha = 0.3, interpolate = True)
+
+    ax.fill_between(x, lo, ho, where = ho>lo,facecolor = "green", alpha = 0.3, interpolate = True)
+    ax.plot(x, mo, c='g',  alpha=0.8,  label = "mean, ols")
+    ax.plot(x, ho, c='g', alpha=0.6,   label = "95 percentile, ols")
+    ax.plot(x, lo, c='g', alpha=0.6, label = "5 percentile, ols")
+
+    # Outline of the region we've filled in
+    ax.plot(x, ml, c='r',  alpha=0.8,  label = "mean, lasso")
+    ax.plot(x, hl, c='r', alpha=0.6,   label = "95 percentile, lasso")
+    ax.plot(x, ll, c='r', alpha=0.6, label = "5 percentile, lasso")
+
+    # Outline of the region we've filled in
+    ax.plot(x, m, c='b', alpha=0.8, label = "mean, ridge")
+    ax.plot(x, h, c='b', alpha=0.6, label = "95 percentile, ridge")
+    ax.plot(x, l, c='b', alpha=0.6, label = "5 percentile, ridge")
+
+    #plt.title("Confidence intervals OLS, Ridge and Lasso", fontsize = 15)
+    plt.xlabel("Coefficent number, beta_i", fontsize = 15)
+    plt.ylabel("y", fontsize = 15)
+    plt.legend()
+    #plt.savefig("Confidence_intervall.png")
+    #plt.show()
+    return
+
+
+def bias(z_true_mean, z_pred):
+    z_pred_mean = np.array([np.array(z).mean() for z in z_pred])
+    val = np.sum(  np.square(  z_true_mean -  np.mean(z_pred_mean) ))
+    return np.sqrt(val)
+
+def model_variance(z_pred, nboots):
+    val = [ (z_pred[i]  -  np.mean(z_pred[i])) for i in range(len(z_pred))  ]
+    return np.sum(val)/nboots
