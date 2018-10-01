@@ -10,15 +10,18 @@ from sklearn.pipeline import make_pipeline
 import algorithms
 import model_selection_new
 from model_comparison_new import model_comparison_new
-from functions import generateDesignmatrix, franke_function, train_test_split
+from utils import generateDesignmatrix, franke_function, train_test_split, bootstrap
+import unittest.mock as mock
+import numpy
 
 np.random.seed(1000)
-m = 30  # m defines the size of the meshgrid.
+m = 30
 x = np.random.rand(m, )
 y = np.random.rand(m, )
 z = franke_function(x, y)
 
 def convert(X):
+    """ Converting the array og columns to a array of rows so its on the same form as the designmatrix. """
     m = len(X)
     n = len(X[0])
     new = np.zeros((n,m))
@@ -28,7 +31,7 @@ def convert(X):
     return new
 
 def test_design():
-    # TODO: make seperate for all p's??
+    """ Checking if the designmatrix works for all polynomals up to degree p=5  """
     for p in range(1,6):
         if (p==1):
             X = [np.ones(len(x)), x, y]
@@ -61,9 +64,10 @@ p = 2
 X = generateDesignmatrix(p,x,y)
 
 def test_ols():
+    """  Testing to see if our algorithms compute approximetly the same betas as scikit does.   """
     our_ols = algorithms.OLS()
     our_ols.fit(X,z)
-    our_betas = our_ols.beta
+    our_betas = our_ols.coef_
 
     # Create linear regression object
     scikit_ols = LinearRegression(fit_intercept=False)
@@ -73,9 +77,25 @@ def test_ols():
 
 
 def test_ridge():
+    """  Testing to see if our algorithms compute approximetly the same betas as scikit does.   """
     our_ridge = algorithms.Ridge(lmd = 0.1)
     our_ridge.fit(X,z)
-    our_betas = our_ridge.beta
+    our_betas = our_ridge.coef_
     scikit_ridge=linear_model.RidgeCV(alphas=[0.1], fit_intercept=False)
     scikit_ridge.fit(X, z)
     assert  np.all(abs( our_betas == scikit_ridge.coef_[:])<1e8)
+
+
+def test_bootstrap():
+    with mock.patch("numpy.random.randint", return_value=np.arange(len(x))):
+        X_subset, z_subset = bootstrap(X, z, 1)
+        assert (np.allclose(X_subset, X) and np.allclose(z, z_subset))
+
+def test_split():
+    n = int(len(x)*0.8)
+    with mock.patch("numpy.random.choice", return_value=np.arange(n)):
+        X_train, X_test, z_train, z_test = train_test_split(X, z, split_size=0.2, random_state=1)
+        print(np.shape(X))
+        print("--------------")
+        print(np.shape(X_train.tolist()+X_test.tolist()))
+        assert (np.allclose(X_train.tolist()+X_test.tolist(), X) and np.allclose(z_train.tolist()+ z_test.tolist(), z  ))

@@ -28,7 +28,7 @@ def model_comparison0(models, param_grid, X, z, split_size=0.2, verbose=True):
         random_state (array-like)
 
     Returns:
-        (dict): Model scores.
+        (dict): Model scores of r2 and mse.
     """
 
     mse = {

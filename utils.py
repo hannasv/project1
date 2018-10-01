@@ -2,6 +2,7 @@ import numpy as np
 from scipy import stats
 import scipy.stats as st
 from resample.bootstrap import bootstrap
+import matplotlib.pyplot as plt
 
 def generateDesignmatrix(p, x, y):
     m = int((p**2+3*p+2)/2)  # returnerer heltall for p = [1:5]
@@ -105,28 +106,36 @@ def ci(x):
     return ci_low, ci_up
 
 def clean_reg_coeff(X, reg_coeff, nboots):
-    B_r = np.zeros(( X.shape[1] , nboots))
-    B_l = np.zeros(( X.shape[1] , nboots))
-    B_o = np.zeros(( X.shape[1] , nboots))
+    """  This is a helpfunction to clean up the dictionary of coefficients so its easier to plot.  """
+    nrCoeff = X.shape[1]
+    B_r = np.zeros((nrCoeff, nboots))
+    B_l = np.zeros((nrCoeff, nboots))
+    B_o = np.zeros((nrCoeff, nboots))
 
     for i in range(nboots):
-        B_r[:, i] = df[i]["ridge"]
-        B_l[:, i] = df[i]["lasso"]
-        B_o[:,i] = df[i]["ols"]
+        B_r[:, i] = reg_coeff[i]["ridge"]
+        B_l[:, i] = reg_coeff[i]["lasso"]
+        B_o[:,i] = reg_coeff[i]["ols"]
 
     m = np.array([B_r[i,:].mean() for i in range(nrCoeff)])
     h = np.array([ci(B_r[i,:])[1] for i in range(nrCoeff)])
     l = np.array([ci(B_r[i,:])[0] for i in range(nrCoeff)])
-    return m,l,h
 
-def plotCI(X, B_r, B_l, B_o):
+    ml = np.array([B_l[i,:].mean() for i in range(nrCoeff)])
+    hl = np.array([ci(B_l[i,:])[1] for i in range(nrCoeff)])
+    ll = np.array([ci(B_l[i,:])[0] for i in range(nrCoeff)])
+
+    mo = np.array([B_o[i,:].mean() for i in range(nrCoeff)])
+    ho = np.array([ci(B_o[i,:])[1] for i in range(nrCoeff)])
+    lo = np.array([ci(B_o[i,:])[0] for i in range(nrCoeff)])
+    return m,l,h, ml, ll, hl, mo,lo,ho
+
+
+def plotCI(X,m,l,h, ml,ll,hl, mo,lo,ho):
+    """  Plot confidence intervals. """
     fig, ax = plt.subplots(figsize = (8,6))
     nrCoeff = X.shape[1]
     x = np.arange(nrCoeff)
-
-    m,l,h = cleanCI(B_r)
-    ml,ll,hl = cleanCI(B_l)
-    mo, lo, ho = cleanCI(B_o)
 
     ax.fill_between(x, l, h, where = h>l, alpha = 0.3, interpolate = True)
     ax.fill_between(x, ll, hl, where = hl>ll,facecolor = "red", alpha = 0.3, interpolate = True)
@@ -145,17 +154,13 @@ def plotCI(X, B_r, B_l, B_o):
     ax.plot(x, m, c='b', alpha=0.8, label = "mean, ridge")
     ax.plot(x, h, c='b', alpha=0.6, label = "95 percentile, ridge")
     ax.plot(x, l, c='b', alpha=0.6, label = "5 percentile, ridge")
-
-    #plt.title("Confidence intervals OLS, Ridge and Lasso", fontsize = 15)
     plt.xlabel("Coefficent number, beta_i", fontsize = 15)
     plt.ylabel("y", fontsize = 15)
     plt.legend()
-    #plt.savefig("Confidence_intervall.png")
-    #plt.show()
     return
 
-
 def bias(z_true_mean, z_pred):
+    """ Calculating model bias  """
     z_pred_mean = np.array([np.array(z).mean() for z in z_pred])
     val = np.sum(  np.square(  z_true_mean -  np.mean(z_pred_mean) ))
     return np.sqrt(val)
