@@ -1,7 +1,11 @@
 import numpy as np
+<<<<<<< HEAD
+import scipy.stats as st
+=======
 from scipy import stats
 import scipy.stats as st
 from resample.bootstrap import bootstrap
+>>>>>>> cat
 
 def generateDesignmatrix(p, x, y):
     m = int((p**2+3*p+2)/2)  # returnerer heltall for p = [1:5]
@@ -99,7 +103,7 @@ def ci(x):
     sigma = np.sqrt(variance(x))
     se = sigma/np.sqrt(n)
     p = 0.025
-    t_val = stats.t.ppf(1-p, n-1)
+    t_val = st.t.ppf(1-p, n-1)
     ci_up = mu + t_val*se
     ci_low = mu - t_val*se
     return ci_low, ci_up

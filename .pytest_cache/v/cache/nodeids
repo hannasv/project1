@@ -3,7 +3,11 @@
   "test_project1.py::test_mse",
   "test_project1.py::test_r2",
   "test_project1.py::test_ols",
+<<<<<<< HEAD
   "test_project1.py::test_ridge",
   "test_project1.py::test_bootstrap",
   "test_project1.py::test_split"
+=======
+  "test_project1.py::test_ridge"
+>>>>>>> master
 ]
