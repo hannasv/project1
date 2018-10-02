@@ -7,16 +7,15 @@ from sklearn import linear_model
 from sklearn.metrics import mean_squared_error, r2_score, mean_squared_log_error, mean_absolute_error
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.pipeline import make_pipeline
+from scipy import stats
+import scipy.stats as st
 import algorithms
-import model_selection_new
-from model_comparison_new import model_comparison_new
-<<<<<<< HEAD
-from utils import generateDesignmatrix, franke_function, train_test_split, bootstrap
+import model_selection0
+from model_comparison0 import model_comparison0
+from utils import generateDesignmatrix, franke_function, train_test_split, bootstrap,  ci
 import unittest.mock as mock
 import numpy
-=======
-from utils import generateDesignmatrix, franke_function, train_test_split
->>>>>>> master
+import utils
 
 np.random.seed(1000)
 m = 30
@@ -59,10 +58,10 @@ def test_design():
             assert np.all(abs(convert(X)- generateDesignmatrix(p,x,y))<1e8)
 
 def test_mse():
-    assert abs(mean_squared_error(x,y) - model_selection_new.GridSearchNew.mean_squared_error(x, y)) < 1e-8
+    assert abs(mean_squared_error(x,y) -utils.mean_squared_error(x, y)) < 1e-8
 
 def test_r2():
-    assert abs( r2_score(x, y) -  model_selection_new.GridSearchNew.r_squared(x, y) ) < 1e-8
+    assert abs( r2_score(x, y) -  utils.r2_score(x, y) ) < 1e-8
 
 p = 2
 X = generateDesignmatrix(p,x,y)
@@ -90,7 +89,6 @@ def test_ridge():
     assert  np.all(abs( our_betas == scikit_ridge.coef_[:])<1e8)
 
 
-<<<<<<< HEAD
 def test_bootstrap():
     with mock.patch("numpy.random.randint", return_value=np.arange(len(x))):
         X_subset, z_subset = bootstrap(X, z, 1)
@@ -104,13 +102,11 @@ def test_split():
         print("--------------")
         print(np.shape(X_train.tolist()+X_test.tolist()))
         assert (np.allclose(X_train.tolist()+X_test.tolist(), X) and np.allclose(z_train.tolist()+ z_test.tolist(), z  ))
-=======
-def test_split():
-    # train_test_split(X, z, split_size=0.2, random_state=None)
-    
-    assert
 
+def test_variance():
+    assert utils.variance(x) == (x.var(ddof=1))
 
-def test_bootstrap():
-    assert
->>>>>>> master
+def test_ci():
+    n = len(x)
+    mu = np.sum(x)/n
+    assert utils.ci(x) == st.t.interval(0.95, n-1, loc=mu, scale=st.sem(x))

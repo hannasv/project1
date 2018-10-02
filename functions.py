@@ -1,11 +1,8 @@
 import numpy as np
-<<<<<<< HEAD
 import scipy.stats as st
-=======
 from scipy import stats
 import scipy.stats as st
 from resample.bootstrap import bootstrap
->>>>>>> cat
 
 def generateDesignmatrix(p, x, y):
     m = int((p**2+3*p+2)/2)  # returnerer heltall for p = [1:5]

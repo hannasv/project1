@@ -128,6 +128,7 @@ def clean_reg_coeff(X, reg_coeff, nboots):
     mo = np.array([B_o[i,:].mean() for i in range(nrCoeff)])
     ho = np.array([ci(B_o[i,:])[1] for i in range(nrCoeff)])
     lo = np.array([ci(B_o[i,:])[0] for i in range(nrCoeff)])
+    
     return m,l,h, ml, ll, hl, mo,lo,ho
 
 

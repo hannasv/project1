@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-from functions import bootstrap, train_test_split, variance, mean_squared_error, r2_score, ci
-=======
 from utils import bootstrap, train_test_split, variance, mean_squared_error, r2_score, ci, bias, model_variance
->>>>>>> cat
 import numpy as np
 import pandas as pd
 
@@ -22,17 +18,14 @@ def model_resample(models, lmd, X, z, nboots, split_size = 0.2):
     random_states = np.arange(nboots)  # number of boots
 
     """ Dictionaires to keep track of the results  """
-    mse = {"ridge": [], "lasso": [], "ols": []}
-    r2 = {"ridge": [], "lasso": [], "ols": []}
-    z_pred = {"ridge": [], "lasso": [], "ols": []}  # mean av alle b0
-<<<<<<< HEAD
-    bias = {"ridge": [], "lasso": [], "ols": []}
-    model_variance = {"ridge": [], "lasso": [], "ols": []}
-    beta = {"ridge": [], "lasso": [], "ols": []}
-    beta0_mean = {"ridge": [], "lasso": [], "ols": []}
-=======
+    mse_test = {"ridge": [], "lasso": [], "ols": []}
+    r2_test = {"ridge": [], "lasso": [], "ols": []}
+    z_pred_test = {"ridge": [], "lasso": [], "ols": []}  # mean av alle b0
     reg_coeffs = {}
->>>>>>> cat
+    "       ----------------------"
+    mse_train = {"ridge": [], "lasso": [], "ols": []}
+    r2_train = {"ridge": [], "lasso": [], "ols": []}
+    z_pred_train = {"ridge": [], "lasso": [], "ols": []}  # mean av alle b0
 
     for random_state in random_states:
 
@@ -48,54 +41,30 @@ def model_resample(models, lmd, X, z, nboots, split_size = 0.2):
             # creating a model with the previosly known best lmd
             estimator = model(lmd[name])
             # Train a model for this pair of lambda and random state
+            """  Keeping information for test """
             estimator.fit(X_train, z_train)
             temp = estimator.predict(X_test)
             reg_coeffs[random_state][name] = estimator.coef_
-            """  Keeping information for each model  """
-            mse[name].append(mean_squared_error(z_test, temp))
-            r2[name].append(r2_score(z_test, temp))
-            z_pred[name].append(temp)
+            mse_test[name].append(mean_squared_error(z_test, temp))
+            r2_test[name].append(r2_score(z_test, temp))
+            z_pred_test[name].append(temp)
 
-            """  Lagre test coeff ogsaa -->  """
+
+            """Lagre information about training """
+            temp = estimator.predict(X_train)
+            mse_train[name].append(mean_squared_error(z_train, temp))
+            r2_train[name].append(r2_score(z_train, temp))
+            z_pred_train[name].append(temp)
 
     """   Calulations done to get the information on correct format    """
-    mse_avg = {"ridge": np.array(mse["ridge"]).mean(),"lasso": np.array(mse["lasso"]).mean(),"ols": np.array(mse["ols"]).mean() }
-    r2_avg = {"ridge": np.array(r2["ridge"]).mean(),"lasso": np.array(r2["lasso"]).mean(),"ols": np.array(r2["ols"]).mean() }
-    bias_model = {"ridge": bias(z_true_mean, z_pred["ridge"]), "ols":bias(z_true_mean, z_pred["ols"]), "lasso": bias(z_true_mean, z_pred["lasso"])}
-    mv = {"ridge": model_variance(z_pred["ridge"], nboots), "ols":model_variance(z_pred["ols"], nboots), "lasso":model_variance(z_pred["lasso"], nboots)}
+    mse_avg_test = {"ridge": np.array(mse_test["ridge"]).mean(),"lasso": np.array(mse_test["lasso"]).mean(),"ols": np.array(mse_test["ols"]).mean() }
+    r2_avg_test = {"ridge": np.array(r2_test["ridge"]).mean(),"lasso": np.array(r2_test["lasso"]).mean(),"ols": np.array(r2_test["ols"]).mean() }
+    bias_model_test = {"ridge": bias(z_true_mean, z_pred_test["ridge"]), "ols":bias(z_true_mean, z_pred_test["ols"]), "lasso": bias(z_true_mean, z_pred_test["lasso"])}
+    mv_test = {"ridge": model_variance(z_pred_test["ridge"], nboots), "ols":model_variance(z_pred_test["ols"], nboots), "lasso":model_variance(z_pred_test["lasso"], nboots)}
 
-<<<<<<< HEAD
-    # z_pred_mean = [np.array(z).mean() for z in z_pred[name]]  # this is te mean for all the boots
-    # bias = abs(z_true_mean - np.array(z_pred_mean).mean())
-    # model_variance = np.sum(np.array(z_pred_mean) - np.array(z_pred_mean).mean())/nboots
-
-    for name, model in models.items():
-        print(name)
-        z_pred_mean = [np.array(z).mean() for z in z_pred[name]]
-        # z_pred_mean = np.array(z).mean()
-        bias[name] = abs(z_true_mean - np.array(z_pred_mean).mean())
-        model_variance[name] = np.sum(np.array(z_pred_mean) - np.array(z_pred_mean).mean()) / nboots
-
-    # print(np.array(z_pred_mean))
-    # print(z_pred[name])
-
-
-
-
-    # print(np.array(z_pred_mean).shape)
-    # print(np.array(z_pred_mean).mean().shape)
-    # print(z_true_mean.shape)
-
-    beta0_mean["ridge"] = np.array(beta["ridge"]).mean(axis=0)
-    beta0_mean["lasso"] = np.array(beta["lasso"]).mean(axis=0)
-    beta0_mean["ols"] = np.array(beta["ols"]).mean(axis=0)
-    # bruker variancen av alle Beta0
-
-    print(np.array(beta0_mean["ols"]).shape)
-
-    ci_coefs = {"ridge": ci(np.array(beta0_mean["ridge"])), "lasso": ci(np.array(beta0_mean["lasso"])), "ols": ci(np.array(beta0_mean["ols"]))}
-
-    return mse_avg, r2_avg, bias, model_variance, ci_coefs
-=======
-    return mse_avg, r2_avg, reg_coeffs, bias_model, mv
->>>>>>> cat
+    mse_train = {"ridge": np.array(mse_train["ridge"]).mean(),"lasso": np.array(mse_train["lasso"]).mean(),"ols": np.array(mse_train["ols"]).mean() }
+    r2_train = {"ridge": np.array(r2_train["ridge"]).mean(),"lasso": np.array(r2_train["lasso"]).mean(),"ols": np.array(r2_train["ols"]).mean() }
+    bias_model_train = {"ridge": bias(z_true_mean, z_pred_train["ridge"]), "ols":bias(z_true_mean, z_pred_train["ols"]), "lasso": bias(z_true_mean, z_pred_train["lasso"])}
+    mv_train = {"ridge": model_variance(z_pred_train["ridge"], nboots), "ols":model_variance(z_pred_train["ols"], nboots), "lasso":model_variance(z_pred_train["lasso"], nboots)}
+    
+    return mse_avg_test, r2_avg_test, reg_coeffs, bias_model_test, mv_test, mse_train, r2_train,  bias_model_train,  mv_train
