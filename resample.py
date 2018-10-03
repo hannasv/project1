@@ -30,12 +30,15 @@ def resample(models, lmd, X, z, nboots, split_size=0.2):
         """  Keeping information for test """
         estimator.fit(X_train, z_train)
         z_pred = np.empty((z_test.shape[0], nboots))
+        beta = np.empty((X.shape[1], nboots))
         for i in range(nboots):
             X_, z_ = bootstrap(X_train, z_train, i)  # i is now also the random state for the bootstrap
 
             estimator.fit(X_, z_)
             # Evaluate the new model on the same test data each time.
             z_pred[:, i] = estimator.predict(X_test)
+
+            beta[:, i] = estimator.coef_
 
         z_test = z_test.reshape((z_test.shape[0], 1))
         error = np.mean(np.mean((z_test - z_pred) ** 2, axis=1, keepdims=True))
@@ -47,3 +50,6 @@ def resample(models, lmd, X, z, nboots, split_size=0.2):
         print('{} >= {} + {} = {}'.format(error, bias, variance, bias + variance))
 
 
+        # Confidence intervals
+        for i in range(beta.shape[0]):
+            ci_i = ci(beta[i,:])
