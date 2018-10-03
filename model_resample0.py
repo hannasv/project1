@@ -1,4 +1,4 @@
-from utils import bootstrap, train_test_split, variance, mean_squared_error, r2_score, ci, bias, model_variance
+from utils import bootstrap, train_test_split, variance, mean_squared_error, r2_score, ci, bias_square, model_variance, error
 import numpy as np
 
 # send in dictionaries with their best lmd values.
@@ -32,7 +32,6 @@ def model_resample(models, lmd, X, z, nboots, split_size = 0.2):
     )
 
     for random_state in random_states:
-
         # Resample the training data.
         X_, z_ = bootstrap(X_train, z_train, random_state)
 
@@ -58,12 +57,21 @@ def model_resample(models, lmd, X, z, nboots, split_size = 0.2):
     """   Calulations done to get the information on correct format    """
     mse_avg_test = {"ridge": np.array(mse_test["ridge"]).mean(),"lasso": np.array(mse_test["lasso"]).mean(),"ols": np.array(mse_test["ols"]).mean() }
     r2_avg_test = {"ridge": np.array(r2_test["ridge"]).mean(),"lasso": np.array(r2_test["lasso"]).mean(),"ols": np.array(r2_test["ols"]).mean() }
-    bias_model_test = {"ridge": bias(z_true_mean, z_pred_test["ridge"]), "ols":bias(z_true_mean, z_pred_test["ols"]), "lasso": bias(z_true_mean, z_pred_test["lasso"])}
+    bias_model_test = {"ridge": bias_square(z_true_mean, z_pred_test["ridge"]), "ols":bias_square(z_true_mean, z_pred_test["ols"]), "lasso": bias_square(z_true_mean, z_pred_test["lasso"])}
     mv_test = {"ridge": model_variance(z_pred_test["ridge"], nboots), "ols":model_variance(z_pred_test["ols"], nboots), "lasso":model_variance(z_pred_test["lasso"], nboots)}
 
     mse_train = {"ridge": np.array(mse_train["ridge"]).mean(),"lasso": np.array(mse_train["lasso"]).mean(),"ols": np.array(mse_train["ols"]).mean() }
     r2_train = {"ridge": np.array(r2_train["ridge"]).mean(),"lasso": np.array(r2_train["lasso"]).mean(),"ols": np.array(r2_train["ols"]).mean() }
-    bias_model_train = {"ridge": bias(z_true_mean, z_pred_train["ridge"]), "ols":bias(z_true_mean, z_pred_train["ols"]), "lasso": bias(z_true_mean, z_pred_train["lasso"])}
+    bias_model_train = {"ridge": bias_square(z_true_mean, z_pred_train["ridge"]), "ols":bias_square(z_true_mean, z_pred_train["ols"]), "lasso": bias_square(z_true_mean, z_pred_train["lasso"])}
     mv_train = {"ridge": model_variance(z_pred_train["ridge"], nboots), "ols":model_variance(z_pred_train["ols"], nboots), "lasso":model_variance(z_pred_train["lasso"], nboots)}
 
-    return mse_avg_test, r2_avg_test, reg_coeffs, bias_model_test, mv_test, mse_train, r2_train,  bias_model_train,  mv_train
+    err_test = {"ols": error(z_test, z_pred_test["ols"]),
+            "ridge": error(z_test, z_pred_test["ridge"]),
+            "lasso": error(z_test, z_pred_test["lasso"])}
+
+    err_train = {"ols": error(z_train, z_pred_train["ols"]),
+                 "ridge": error(z_train, z_pred_train["ridge"]),
+                 "lasso": error(z_train, z_pred_train["lasso"])}
+
+
+    return mse_avg_test, r2_avg_test, reg_coeffs, bias_model_test, mv_test, mse_train, r2_train,  bias_model_train,  mv_train, err_test, err_train

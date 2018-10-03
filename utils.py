@@ -128,7 +128,7 @@ def clean_reg_coeff(X, reg_coeff, nboots):
     mo = np.array([B_o[i,:].mean() for i in range(nrCoeff)])
     ho = np.array([ci(B_o[i,:])[1] for i in range(nrCoeff)])
     lo = np.array([ci(B_o[i,:])[0] for i in range(nrCoeff)])
-    
+
     return m,l,h, ml, ll, hl, mo,lo,ho
 
 
@@ -160,12 +160,16 @@ def plotCI(X,m,l,h, ml,ll,hl, mo,lo,ho):
     plt.legend()
     return
 
-def bias(z_true_mean, z_pred):
+def bias_square(z_true_mean, z_pred):
     """ Calculating model bias  """
     z_pred_mean = np.array([np.array(z).mean() for z in z_pred])
-    val = np.sum(  np.square(  z_true_mean -  np.mean(z_pred_mean) ))
-    return np.sqrt(val)
+    val = np.mean(  np.square(  z_true_mean -  np.mean(z_pred_mean) ))
+    return val
 
 def model_variance(z_pred, nboots):
     val = [ (z_pred[i]  -  np.mean(z_pred[i])) for i in range(len(z_pred))  ]
-    return np.sum(val)/nboots
+    return np.mean(val)/nboots
+
+def error(y_test, y_pred):
+    square_diff =  [np.square(y_test - y_pred[i]) for i in range(np.shape(y_pred)[0])]
+    return np.mean( np.mean(square_diff ))
