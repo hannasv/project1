@@ -1,7 +1,6 @@
 import numpy as np
 from scipy import stats
 import scipy.stats as st
-from resample.bootstrap import bootstrap
 import matplotlib.pyplot as plt
 
 def generateDesignmatrix(p, x, y):
