@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8e098197-c801-4357-8649-5c45136a36de" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.ipynb_checkpoints/Project1_FYSSTK4155-checkpoint.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/.ipynb_checkpoints/Project1_FYSSTK4155-checkpoint.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Project1_FYSSTK4155.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Project1_FYSSTK4155.ipynb" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -58,8 +57,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model_selection0.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="272">
-              <caret line="16" column="10" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
+            <state relative-caret-position="685">
+              <caret line="58" column="35" selection-start-line="58" selection-start-column="35" selection-end-line="58" selection-end-column="44" />
+              <folding>
+                <element signature="e#266#284#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -71,11 +73,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/resample.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="169">
-              <caret line="110" column="20" selection-start-line="110" selection-start-column="20" selection-end-line="110" selection-end-column="20" />
+            <state relative-caret-position="602">
+              <caret line="49" column="37" selection-start-line="49" selection-start-column="37" selection-end-line="49" selection-end-column="37" />
               <folding>
                 <element signature="e#51#162#0" expanded="true" />
               </folding>
@@ -86,7 +88,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/example_resample.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="183">
+            <state relative-caret-position="768">
               <caret line="49" selection-start-line="49" selection-end-line="49" selection-end-column="44" />
               <folding>
                 <element signature="e#0#31#0" expanded="true" />
@@ -95,10 +97,10 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model_resample.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="107">
+            <state relative-caret-position="382">
               <caret line="47" column="33" selection-start-line="47" selection-start-column="27" selection-end-line="47" selection-end-column="33" />
               <folding>
                 <element signature="e#0#111#0" expanded="true" />
@@ -110,8 +112,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/model_comparison0.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="917">
-              <caret line="60" column="24" selection-start-line="60" selection-start-column="18" selection-end-line="60" selection-end-column="24" />
+            <state relative-caret-position="285">
+              <caret line="60" column="34" lean-forward="true" selection-start-line="60" selection-start-column="34" selection-end-line="60" selection-end-column="34" />
               <folding>
                 <element signature="e#257#274#0" expanded="true" />
               </folding>
@@ -306,10 +308,10 @@
     <editor active="true" />
     <layout>
       <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.24960254" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24960254" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info anchor="bottom" id="Version Control" />
-      <window_info active="true" anchor="bottom" id="Python Console" visible="true" weight="0.28647688" />
+      <window_info anchor="bottom" id="Python Console" visible="true" weight="0.28647688" />
       <window_info anchor="bottom" id="Terminal" weight="0.3291815" />
       <window_info anchor="bottom" id="Event Log" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -358,16 +360,14 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model_selection0.py">
+    <entry file="file://$PROJECT_DIR$/algorithms.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="272">
-          <caret line="16" column="10" selection-start-line="16" selection-start-column="10" selection-end-line="16" selection-end-column="10" />
-        </state>
+        <state relative-caret-position="-692" />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/example_resample.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="183">
+        <state relative-caret-position="768">
           <caret line="49" selection-start-line="49" selection-end-line="49" selection-end-column="44" />
           <folding>
             <element signature="e#0#31#0" expanded="true" />
@@ -375,37 +375,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/algorithms.py">
+    <entry file="file://$PROJECT_DIR$/model_resample.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-692" />
+        <state relative-caret-position="382">
+          <caret line="47" column="33" selection-start-line="47" selection-start-column="27" selection-end-line="47" selection-end-column="33" />
+          <folding>
+            <element signature="e#0#111#0" expanded="true" />
+          </folding>
+        </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resample.py">
+    <entry file="file://$PROJECT_DIR$/model_selection0.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="169">
-          <caret line="110" column="20" selection-start-line="110" selection-start-column="20" selection-end-line="110" selection-end-column="20" />
+        <state relative-caret-position="685">
+          <caret line="58" column="35" selection-start-line="58" selection-start-column="35" selection-end-line="58" selection-end-column="44" />
           <folding>
-            <element signature="e#51#162#0" expanded="true" />
+            <element signature="e#266#284#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/model_comparison0.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="917">
-          <caret line="60" column="24" selection-start-line="60" selection-start-column="18" selection-end-line="60" selection-end-column="24" />
+        <state relative-caret-position="285">
+          <caret line="60" column="34" lean-forward="true" selection-start-line="60" selection-start-column="34" selection-end-line="60" selection-end-column="34" />
           <folding>
             <element signature="e#257#274#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/model_resample.py">
+    <entry file="file://$PROJECT_DIR$/resample.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="107">
-          <caret line="47" column="33" selection-start-line="47" selection-start-column="27" selection-end-line="47" selection-end-column="33" />
+        <state relative-caret-position="602">
+          <caret line="49" column="37" selection-start-line="49" selection-start-column="37" selection-end-line="49" selection-end-column="37" />
           <folding>
-            <element signature="e#0#111#0" expanded="true" />
+            <element signature="e#51#162#0" expanded="true" />
           </folding>
         </state>
       </provider>
