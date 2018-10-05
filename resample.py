@@ -51,7 +51,7 @@ def resample(models, lmd, X, z, nboots, split_size=0.2):
         """  Keeping information for test """
         estimator.fit(X_train, z_train)
         z_pred_test_ = np.empty((z_test_.shape[0], nboots))
-        z_pred_train = np.empty((z_train.shape[0], nboots))
+        z_pred_train_ = np.empty((z_train.shape[0], nboots))
         beta_ = np.empty((X.shape[1], nboots))
         for i in range(nboots):
             X_, z_ = bootstrap(X_train, z_train, i)  # i is now also the random state for the bootstrap
@@ -59,6 +59,7 @@ def resample(models, lmd, X, z, nboots, split_size=0.2):
             estimator.fit(X_, z_)
             # Evaluate the new model on the same test data each time.
             z_pred_test_[:, i] = np.squeeze(estimator.predict(X_test))
+            z_pred_train_[:, i] = np.squeeze(estimator.predict(X_train))
             beta_[:, i] = np.squeeze(estimator.coef_)
 
         beta[name] = beta_
@@ -71,7 +72,7 @@ def resample(models, lmd, X, z, nboots, split_size=0.2):
         var[name] = np.mean(np.var(z_pred_test_, axis=1, keepdims=True))
 
         z_train = z_train.reshape((z_train.shape[0], 1))
-        mse_train[name] = np.mean(np.mean((z_train - z_pred_train) ** 2, axis=1, keepdims=True))
+        mse_train[name] = np.mean(np.mean((z_train - z_pred_train_) ** 2, axis=1, keepdims=True))
 
         # print('Error:', mse_test)
         # print('Bias^2:', bias)
