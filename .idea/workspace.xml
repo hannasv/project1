@@ -2,7 +2,21 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8e098197-c801-4357-8649-5c45136a36de" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Project1_FYSSTK4155.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/Project1_FYSSTK4155.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/figures/MSEvsLambda/MSEvsLambda_seed100000.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/figures/MSEvsLambda/MSEvsLambda_seed105.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/figures/MSEvsLambda/MSEvsLambda_seed105_zoomOut.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/figures/MSEvsLambda/MSEvsLambda_seed1825.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/figures/MSEvsLambda/MSEvsLambda_seed23.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/figures/MSEvsLambda/MSEvsLambda_seed77777.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/figures/MSEvsLambda/MSEvsLambda_seed92.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/figures/MSEvsLambda/OLS_MSEvsLambda_seed105.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/figures/MSEvsLambda/OLS_MSEvsLambda_seed105_p10.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/figures/MSEvsLambda/OLS_MSEvsLambda_seed105_p20.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/figures/bias_variance/bias_variance_ols.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/figures/performance/performance_p5.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/results/figures/scatter_zpred/scatter_zpred_ols_p5.png" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -161,7 +175,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-6" />
     <option name="y" value="-6" />
     <option name="width" value="381" />
@@ -301,7 +315,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-7" y="-7" width="1295" height="695" extended-state="7" />
+    <frame x="-7" y="-7" width="1295" height="695" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24960254" />
