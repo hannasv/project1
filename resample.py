@@ -111,4 +111,4 @@ def resample(models, lmd, X, z, nboots, split_size=0.2):
         # plt.legend()
         # plt.show()
 
-    return z_test, z_pred_test, bias, var, beta, mse_test, mse_train
+    return z_test, z_pred_test, bias, var, beta, mse_test, mse_train, ci_beta
