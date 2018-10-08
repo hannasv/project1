@@ -4,7 +4,7 @@ This cite contains all the material for our solution of project 1 in the course 
 Describe the content (which files are here) and how to run them.
 
 ## abstract
-In this article we show that applying linear regression analysis to terrain data allows us to represent the main characteristics of the smoothed topography, although we are not able to describe all the features of the terrain with these simple models. 
+In this project we show that applying linear regression analysis to terrain data allows us to represent the main characteristics of the smoothed topography, although we are not able to describe all the features of the terrain with these simple models. 
 
 We fit the terrain data with polynomials of degree, p where $p\in[1,5]$. As expected, an increase in the polynomial degree, $p$ leads to a better fit and a better prediction. This is quantified with a lower MSE and R-squared score closer to 1. However, the error depends strongly on the characteristics of the topography, for instance, the slope and the regularity of the terrain, whether there are large elevation differences in a small areas.
 %in the range $1<p<5$. 
