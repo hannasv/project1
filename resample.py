@@ -7,16 +7,6 @@ import matplotlib.pyplot as plt
 
 def resample(models, lmd, X, z, nboots, split_size=0.2):
 
-    """ lmd is a dictionary of regression methods (name) with their corresponding best hyperparam
-
-      Returns dict = {
-                    "mse_avg": { "ridge": , "ols": , "lasso":  },
-                    "r2_avg": { "ridge": , "ols": , "lasso":  },
-                    "bias_model": { "ridge": , "ols": , "lasso":  },
-                    "model variance" : { "ridge": , "ols": , "lasso":  }
-                    "  regression coefficient   " :  {"0": [], "1":[] ,...., for all boots}
-    }"""
-
     """ Dictionaires to keep track of the results  """
     z_test = {"ridge": [], "lasso": [], "ols": []}
     z_pred_test = {"ridge": [], "lasso": [], "ols": []}
