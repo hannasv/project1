@@ -1,14 +1,13 @@
 # Project 1 - Regression anaysis with resampling
-This cite contains all the material for our answar to the assignment project 1 in the course fys-stk4155 at UiO. 
+This cite contains all the material for our assignment project 1 in the course fys-stk4155 at UiO. 
 
 Each regression method implemented as a class in the file algorithms.py, with their own class functions fit and predict. The script utils.py contains functions accessed from the notebooks and code used in this report. All the functions in utils.py where tested in the file test_project1.py. In order to execute the tests you make the following call in your command line. 
 
 pytest test_project1.py
 
+We have structured the solution into two parts. The first part consists of finding the optimal hyperparameter lambda. This is done with a call to the model_comparison function, which creates one instance of a gridsearch object for each regression method given as an input. The gridsearch object fits all of the methods and returns itself. The gridsearch object now contains all the properties of the regression. These can now easily be accessed in model_comparison which returns a dictionary of the performance metrics. Dertailed descriptions on how to use the functions are found in Project1_FYSSTK4155.ipynb.
 
-We have structured the solution into two parts. The first part consists of finding the optimal hyperparameter $\lambda$. This is done with a call to the model_comparison function, which creates one instance of a gridsearch object for each regression method given as an input. The gridsearch object fits all of the methods and returns itself. The gridsearch object now contains all the properties of the regression. These can now easily be accessed in model_comparison which returns a dictionary of the performance metrics. This is done in the Project1_FYSSTK4155.ipynb. 
-
-Folder with results contain results not shown but reffered to in the pdf.
+Folder with results contain all the figures created with the notebooks.
 
 ## Abstract
 In this project we show that applying linear regression analysis to terrain data allows us to represent the main characteristics of the smoothed topography, although we are not able to describe all the features of the terrain with these simple models. 
