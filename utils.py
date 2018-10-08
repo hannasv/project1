@@ -1,7 +1,6 @@
 import numpy as np
 from scipy import stats
 import scipy.stats as st
-from resample.bootstrap import bootstrap
 import matplotlib.pyplot as plt
 
 def generateDesignmatrix(p, x, y):
@@ -163,8 +162,13 @@ def plotCI(X,m,l,h, ml,ll,hl, mo,lo,ho):
 def bias_square(z_true_mean, z_pred):
     """ Calculating model bias  """
     z_pred_mean = np.array([np.array(z).mean() for z in z_pred])
+<<<<<<< HEAD
     val = np.mean(  np.square(  z_true_mean -  np.mean(z_pred_mean) ))
     return val
+=======
+    val = np.sum(  np.square(  z_true_mean -  np.mean(z_pred_mean) ))
+    return np.sqrt(val)   # returner val
+>>>>>>> dog
 
 def model_variance(z_pred, nboots):
     val = [ (z_pred[i]  -  np.mean(z_pred[i])) for i in range(len(z_pred))  ]

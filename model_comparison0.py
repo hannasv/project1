@@ -31,13 +31,25 @@ def model_comparison0(models, param_grid, X, z, split_size=0.2, verbose=True):
         (dict): Model scores of r2 and mse.
     """
 
-    mse = {
+    mse_test = {
         'ridge': [],
         'lasso': [],
         "ols": []
     }
 
-    r2 = {
+    mse_train = {
+        'ridge': [],
+        'lasso': [],
+        "ols": []
+    }
+
+    r2_test = {
+        'ridge': [],
+        'lasso': [],
+        "ols": []
+    }
+
+    r2_train = {
         'ridge': [],
         'lasso': [],
         "ols": []
@@ -58,14 +70,16 @@ def model_comparison0(models, param_grid, X, z, split_size=0.2, verbose=True):
         grid.fit(X, z, split_size=0.2)
 
         # store the scores for each model
-        mse[name].append(grid.mse)
-        r2[name].append(grid.r2)
+        mse_test[name].append(grid.mse_test)
+        mse_train[name].append(grid.mse_train)
+        r2_test[name].append(grid.r2_test)
+        r2_train[name].append(grid.r2_train)
 
         # find best mse
-        mn, idx = min((grid.mse[i], i) for i in range(len(grid.mse)))
+        mn, idx = min((grid.mse_test[i], i) for i in range(len(grid.mse_test)))
         print(idx)
         z_pred_best[name] = grid.z_pred[idx]
 
-    results = {"mse": mse, "r2": r2}
+    results = {"mse_test": mse_test, "mse_train": mse_train, "r2_test": r2_test, "r2_train": r2_train}
 
     return results, z_pred_best

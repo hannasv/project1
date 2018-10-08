@@ -17,4 +17,8 @@ We fit the terrain data with polynomials of degree, p where p in [1,5]. As expec
 
 On the other hand, an increase in the penalisation parameter for both Ridge- and LASSO regressions does not improve the quality of the fit, demonstrating that the Simple Linear Regression OLS, a particular case of these two types of regression with a regularisation parameter equal to zero, is the best model for fitting terrain data. 
 
+<<<<<<< HEAD
 After comparing the error to the bias and the variance, we can affirm that the optimal polynomial degree is higher than 5. We are aware of that the main reason why we cannot reproduce all the characteristics of the elevation is that we use polynomials to predict a surface that does not have a polynomial behaviour. We suspect that the fit could be improved by using other functions, or methods that are non-linear. This would be implemented in a future work.
+=======
+After comparing the error to the bias and the variance, we can affirm that the optimal polynomial degree is higher than 5. We are aware of that the main reason why we cannot reproduce all the characteristics of the elevation is that we use polynomials to predict a surface that does not have a polynomial behaviour. We suspect that the fit could be improved by using other functions, or methods that are non-linear. This would be implemented in a future work.
+>>>>>>> dog

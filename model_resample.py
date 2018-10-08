@@ -65,5 +65,10 @@ def model_resample(models, lmd, X, z, nboots, split_size = 0.2):
     r2_train = {"ridge": np.array(r2_train["ridge"]).mean(),"lasso": np.array(r2_train["lasso"]).mean(),"ols": np.array(r2_train["ols"]).mean() }
     bias_model_train = {"ridge": bias(z_true_mean, z_pred_train["ridge"]), "ols":bias(z_true_mean, z_pred_train["ols"]), "lasso": bias(z_true_mean, z_pred_train["lasso"])}
     mv_train = {"ridge": model_variance(z_pred_train["ridge"], nboots), "ols":model_variance(z_pred_train["ols"], nboots), "lasso":model_variance(z_pred_train["lasso"], nboots)}
+<<<<<<< HEAD
 
     return mse_avg_test, r2_avg_test, reg_coeffs, bias_model_test, mv_test, mse_train, r2_train,  bias_model_train,  mv_train
+=======
+    
+    return mse_avg_test, r2_avg_test, reg_coeffs, bias_model_test, mv_test, mse_train, r2_train,  bias_model_train,  mv_train, z_pred_test, z_pred_train, z_test, z_train
+>>>>>>> dog
